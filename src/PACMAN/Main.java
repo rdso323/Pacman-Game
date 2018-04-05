@@ -53,8 +53,10 @@ public class Main extends Application {
         Jiren.relocate(300,300);
         Kefla.relocate(600, 600);
 
-        Scene scene = new Scene(map, W, H, Color.ORANGERED);
+        Scene scene = new Scene(map, W, H, Color.TURQUOISE);
+        
 
+//
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -76,7 +78,7 @@ public class Main extends Application {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case W: North = false; break;
-                    case D:	East  = false; break;
+                    case D: East  = false; break;
                     case S: South = false; break;
                     case A: West  = false; break;
 
@@ -85,13 +87,6 @@ public class Main extends Application {
 					break;
                 }
             }
-            
-           
-//            public void handle(ActionEvent arg0) {
-//              if (Goku.getLayoutX() < Jiren.getLayoutX()) {
-//            	  Platform.exit();
-//              }
-//            }
         });
 
         stage.setScene(scene);								//Show the scene
@@ -107,11 +102,12 @@ public class Main extends Application {
                 if (North){ 
                 	dy -= 2;					//Speed of movement
                 }
-                else if (South){
-                	dy += 2;
-                }
                 else if (East){
                 	dx += 2;
+                }
+                
+                else if (South){
+                	dy += 2;
                 }
                 else if (West){
                 	dx -= 2;
@@ -120,6 +116,8 @@ public class Main extends Application {
 
                 moveGokuBy(dx, dy);
                 moveJiren();
+                moveKefla();
+//                GameOver();
             }
         };
         Movement.start();
@@ -156,37 +154,87 @@ public class Main extends Application {
 //    	int count = 0;
     	int count = 0;
     	
-    	final double Jiren_width = Jiren.getBoundsInLocal().getWidth() / 2;
+    	final double Jiren_Width = Jiren.getBoundsInLocal().getWidth() / 2;
  //       final double Jiren_height = Jiren.getBoundsInLocal().getHeight() / 2;
     	
-    	double jx = Jiren.getLayoutX() + Jiren_width + gx;
+    	double jx = Jiren.getLayoutX() + Jiren_Width + gx;
 //    	double jy = Jiren.getLayoutY() + gy;
     	
-    	if(jx - Jiren_width == 100) {
-    		gx += 2;
-    		count = 1;
-    	}
-    	else if((jx + Jiren_width) == (W-100)) {
-    		gx -= 2;
-    		count = 0;
-    	}
+//    	if(jx - Jiren_Width == 100) {
+//    		gx += 2;
+//    		count = 1;
+//    	}
+//    	else if((jx + Jiren_Width) == (W-100)) {
+//    		gx -= 2;
+//    		count = 0;
+//    	}
+//    	
+//    	if(count == 0) {
+//    		gx = -2;
+//    	}
+//    	else {
+//    		gx = 2;
+//    	}
+    		
+    		gx = -3;
     	
-    	if(count == 0) {
-    		gx = -2;
+    	
+    	
+    	jx = Jiren.getLayoutX() + Jiren_Width + gx;
+    	
+    	if(jx-Jiren_Width == -81) {
+    		Jiren.relocate(W+2,300);
     	}
     	else {
-    		gx = 2;
+    		Jiren.relocate(jx-Jiren_Width, 300);
     	}
     	
-    	
-    	jx = Jiren.getLayoutX() + Jiren_width + gx;
-    	
-    	Jiren.relocate(jx-Jiren_width, 300);
+    	System.out.println(jx-Jiren_Width + " " + (0-Jiren_Width));
     }
     
-    private void GameOver() {
-  //  	if
+    private void moveKefla() {			//Attacks User
+    	
+    	int px = 0;
+    	int py = 0;
+    	
+    	final double Kefla_Width = Kefla.getBoundsInLocal().getWidth() / 2;
+    	final double Kefla_Height = Kefla.getBoundsInLocal().getHeight() / 2;
+    	
+    	double DistanceX = Goku.getLayoutX() + Goku.getBoundsInLocal().getWidth() / 2 - 
+    						(Kefla.getLayoutX() + Kefla_Width);
+    	
+    	double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 - 
+				(Kefla.getLayoutY() + Kefla_Height);
+    	
+    	if(DistanceX > 0) {
+    		px = 1;
+    	}
+    	else {
+    		px = -1;
+    	}
+    	
+    	if(DistanceY > 0) {
+    		py = 1;
+    	}
+    	else {
+    		py = -1;
+    	}
+    	
+    	double kx = Kefla.getLayoutX() + Kefla_Width + px;
+    	double ky = Kefla.getLayoutY() + Kefla_Height + py;
+    	
+    	Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height);
     }
+    
+//    private void GameOver() {
+////            if (Goku.getLayoutX() == Jiren.getLayoutX()) {
+////          	  Platform.exit();
+////            }
+//    		if (Goku.getLayoutBounds() == (Kefla.getLayoutBounds())){
+//    			Platform.exit();
+//    		}
+//    }
+//    
 
     public static void main(String[] args) { launch(args); }
 }
