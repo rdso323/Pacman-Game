@@ -10,9 +10,12 @@ import javafx.scene.layout.HBox;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.*;;
+import javafx.scene.image.*;
+import javafx.scene.text.*;
+import javafx.scene.layout.BackgroundImage;
 
 public class Main extends Application {
 
@@ -27,8 +30,6 @@ public class Main extends Application {
 	Button buttonHelp;
 	Button buttonHighScore;
 	Button buttonHomeScreen,buttonHomeScreen1,buttonHomeScreen2,buttonHomeScreen3; //helper button
-
-	//Image gokuHome = new Image("goku.png");
 
 	@Override
 	public void start(Stage primaryStage){
@@ -68,6 +69,7 @@ public class Main extends Application {
 		menu.setPadding(new Insets(10,10,200,10));
 		menu.setLeft(homeLayout1);
 		menu.setBottom(homeLayout);
+		menu.setStyle("-fx-background-image: url(\"file:goku.png\"); -fx-background-repeat: no-repeat;");
 		homeScene = new Scene(menu,1024,768);
 
 		StackPane singlePlayerLayout = new StackPane();
@@ -80,9 +82,23 @@ public class Main extends Application {
 		multiPlayerLayout.getChildren().add(buttonHomeScreen1);
 		multiPlayerScene = new Scene(multiPlayerLayout, 1024,768);
 
+
+		Text storyLine = new Text ("Story-Line: \nTribute to the series Dragon Ball Super. \n"
+				+ "Our main protagonist Goku has fought several battles throughout \n"
+				+ "his time, including matchups with Jiren, Hit, Kefla and Toppo. \n"
+				+ "However, in every battle he’s always required a full belly to operate.\n"
+				+ "\n"
+				+ "You need to traverse throughout the levels eating as much Ramen as possible,\n"
+				+ "whilst avoiding his enemies in this weakened state. There are collectibles \n"
+				+ "(Dragon Balls) scattered throughout the level which may assist you \n"
+				+ "(Not always the case). Can you make it through all the levels successfully? \n\n");
+		storyLine.setFont(Font.font("Verdana",20));
+
+
 		VBox helpLayout = new VBox(20);
 		helpLayout.setPadding(new Insets(10,10,10,10));
 		helpLayout.getChildren().add(buttonHomeScreen2);
+		helpLayout.getChildren().add(storyLine);
 		helpScene = new Scene(helpLayout, 1024,768);
 
 		VBox highScoreLayout = new VBox(20);
