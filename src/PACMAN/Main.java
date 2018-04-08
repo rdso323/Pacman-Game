@@ -1,7 +1,8 @@
 package PACMAN;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Scanner;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -11,8 +12,12 @@ import javafx.scene.*;
 import javafx.scene.image.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
+import java.io.FileNotFoundException;
 
 /**
  * Hold down an arrow key to have your character move around the screen.
@@ -36,16 +41,19 @@ public class Main extends Application {
 
     private Image GokuImage, JirenImage, KeflaImage, ToppoImage, WallImage;
     private Node  Goku, Jiren, Kefla, Toppo, Wall;
+    Rectangle rectangle = new Rectangle(100,100,64,64);
+    int[] Maze_Array;
+    Group map = new Group();
     
 
     boolean North, South, East, West;
 
     @Override
     public void start(Stage stage) throws Exception {
-    	GokuImage = new Image("file:Goku.jpg",75,75,true,true);
-    	JirenImage = new Image("file:Baby_Vegeta.jpg",75,75,true,true);
-    	KeflaImage = new Image("file:Baby_Vegeta.jpg",75,75,true,true);
-    	ToppoImage = new Image("file:Baby_Vegeta.jpg",75,75,true,true);
+    	GokuImage = new Image("file:Goku.jpg",64,64,false,false);
+    	JirenImage = new Image("file:Baby_Vegeta.jpg",64,64,true,true);
+    	KeflaImage = new Image("file:Baby_Vegeta.jpg",64,64,true,true);
+    	ToppoImage = new Image("file:Baby_Vegeta.jpg",64,64,true,true);
     	WallImage = new Image(BRICK_WALL_LOC,30,30,true,true);
     	
     	Goku = new ImageView(GokuImage);
@@ -53,18 +61,34 @@ public class Main extends Application {
     	Kefla = new ImageView(KeflaImage);
     	Toppo = new ImageView(ToppoImage);
     	
+    	
+//        Pane canvas = new Pane();
+//        canvas.setStyle("-fx-background-color: black;");
+ //       canvas.setPrefSize(200,200);
+//        Circle circle = new Circle(5,Color.BLUE);
+ //       circle.relocate(20, 20);
 
-        Group map = new Group(Goku);
+//        canvas.getChildren().addAll(circle,rectangle);
+
+
  //       Group map2 = new Group(Jiren);
 
-        moveGokuTo(W / 2, H / 2);			//Starting position
+        
+        map.getChildren().add(Goku);
         map.getChildren().add(Jiren);
         map.getChildren().add(Kefla);
         map.getChildren().add(Toppo);
+        map.getChildren().add(rectangle);
+//        map.getChildren().add(circle);
+//        map.getChildren().add(rectangle);
+        moveGokuTo(W / 2, H / 2);			//Starting position
         
         Jiren.relocate(300,300);
-        Kefla.relocate(600, 600);
+        Kefla.relocate(600,600);
         Toppo.relocate(100,100);
+        rectangle.setFill(Color.BEIGE);
+ //       rectangle.relocate(70,70);
+        Maze();
 
         Scene scene = new Scene(map, W, H, Color.TURQUOISE);
     
@@ -82,16 +106,16 @@ public class Main extends Application {
 //				default:
 //					break;
 //                }
-            	if(event.getCode() == KeyCode.W) {
+            	if(event.getCode() == KeyCode.UP) {
             		North = true; East = false; South = false; West = false;
             	}
-            	if(event.getCode() == KeyCode.A) {
+            	if(event.getCode() == KeyCode.LEFT) {
             		West = true; North = false; South = false; East = false;
             	}
-            	if(event.getCode() == KeyCode.S) {
+            	if(event.getCode() == KeyCode.DOWN) {
             		South = true; East = false; North = false; West = false;
             	}
-            	if(event.getCode() == KeyCode.D) {
+            	if(event.getCode() == KeyCode.RIGHT) {
             		East = true; North = false; South = false; West = false;
             	}
             }
@@ -137,12 +161,20 @@ public class Main extends Application {
                 	dx -= 2;
                 }
 //                if (running) { dx *= 3; dy *= 3; }
+                
 
-                moveGokuBy(dx, dy);
-                moveJiren();
-                moveKefla();
-                moveToppo();
-//                GameOver();
+
+               moveGokuBy(dx, dy);
+               moveJiren();
+               moveKefla();
+               moveToppo();
+                
+//                try {
+//					Maze();
+//				} catch (FileNotFoundException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
             }
         };
         Movement.start();
@@ -156,7 +188,7 @@ public class Main extends Application {
 
         double x = Goku_Width + Goku.getLayoutX() + dx;
         double y = Goku_Height+ Goku.getLayoutY() + dy;
-        System.out.println(Goku.getLayoutY());
+ //       System.out.println(Goku.getLayoutY());
         moveGokuTo(x, y);						//Moves mid point to this point
     }
 
@@ -168,7 +200,12 @@ public class Main extends Application {
             x + Goku_Width <= W &&
             y - Goku_Height >= 0 &&
             y + Goku_Height <= H) {
-            Goku.relocate(x - Goku_Width , y - Goku_Height);
+        	
+        	if(Collision(x,y)==false) {
+            	Goku.relocate(x - Goku_Width , y - Goku_Height);
+        	}
+
+
         }
         
     }
@@ -214,7 +251,7 @@ public class Main extends Application {
     		Jiren.relocate(jx-Jiren_Width, 300);
     	}
     	
-    	System.out.println(jx-Jiren_Width + " " + (0-Jiren_Width));
+//    	System.out.println(jx-Jiren_Width + " " + (0-Jiren_Width));
     }
     
     private void moveKefla() {			//Attacks User
@@ -252,7 +289,7 @@ public class Main extends Application {
     }
     
     
-private void moveToppo() {			//Attacks User
+    private void moveToppo() {			//Attacks User
     	
     	int px = 0;
     	int py = 0;
@@ -287,11 +324,52 @@ private void moveToppo() {			//Attacks User
     }
     
     
-//    private void Maze() {
-//    	Rectangle R1 = new Rectangle(20,20);
-//    	
-//    	
-//    }
+	private void Maze() throws FileNotFoundException{
+		int[] Array = {
+		    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+		    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0
+		};
+		
+		int j=0;
+		
+		for(int i=0;i<Array.length;i++) {
+			j = i/16;
+			if(Array[i]==1) {
+				Rectangle vectangle = new Rectangle(64*(i%16),64*j,64,64);
+				vectangle.setFill(Color.DARKGREY);
+				map.getChildren().add(vectangle);
+			}
+		}
+////		
+//		Scanner Import_Maze = new Scanner(new File("Maze_CSV.csv"));
+//        Import_Maze.useDelimiter(",");
+//        int i = 0;
+//        
+//        while(Import_Maze.hasNext()){
+//        	Maze_Array[i] =  Integer.parseInt(Import_Maze.next());
+//        	i++;
+//        }
+//        
+//        Import_Maze.close();
+//
+//        for(int x=0;x<=Maze_Array.length;x++) {
+//        	System.out.println(Maze_Array[x]);
+//         }
+//        
+//
+////        
+//       		
+//	}
     
 //    private void GameOver() {
 ////            if (Goku.getLayoutX() == Jiren.getLayoutX()) {
@@ -300,10 +378,33 @@ private void moveToppo() {			//Attacks User
 //    		if (Goku.getLayoutBounds() == (Kefla.getLayoutBounds())){
 //    			Platform.exit();
 //    		}
-//    }
-//    
+    }
     
+
     
+    private boolean Collision (double x , double y) {
+    	double rectangle_midx = this.rectangle.getLayoutX() +(rectangle.getBoundsInLocal().getWidth()/2);
+    	System.out.println(rectangle_midx);
+    	System.out.println(rectangle.getLayoutX());
+    	double rectangle_midy = this.rectangle.getLayoutY() + (rectangle.getBoundsInLocal().getHeight()/2);
+    	double Goku_midx = x;
+    	double Goku_midy = y;
+    	double rectangle_width = this.rectangle.getBoundsInLocal().getWidth()/2;
+    	double rectangle_height = this.rectangle.getBoundsInLocal().getHeight()/2;
+    	double Goku_width = Goku.getBoundsInLocal().getWidth()/2;
+    	double Goku_height = Goku.getBoundsInLocal().getHeight()/2;
+    	
+    	if ((Goku_midx - Goku_width) <= (rectangle_midx + rectangle_width) && 
+    		(Goku_midy - Goku_height) <= (rectangle_midy + rectangle_height) &&
+    		(Goku_midx + Goku_width) >= (rectangle_midx - rectangle_width) && 
+    		(Goku_midy + Goku_height) >= (rectangle_midy - rectangle_height))
+    	{
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
     
 
     public static void main(String[] args) { launch(args); }
