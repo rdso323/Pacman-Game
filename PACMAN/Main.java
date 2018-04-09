@@ -29,7 +29,7 @@ public class Main extends Application {
 	Button buttonMultiPlayer;
 	Button buttonHelp;
 	Button buttonHighScore;
-	Button buttonHomeScreen,buttonHomeScreen1,buttonHomeScreen2,buttonHomeScreen3; //helper button
+	Button buttonPause,buttonHomeScreen1,buttonHomeScreen2,buttonHomeScreen3; //helper button
 
 	@Override
 	public void start(Stage primaryStage){
@@ -49,8 +49,8 @@ public class Main extends Application {
 		buttonHighScore.setMinSize(150, 50);
 		buttonHighScore.setOnAction(e -> primaryStage.setScene(highScoreScene));
 
-		buttonHomeScreen = new Button("Main menu");
-		buttonHomeScreen.setOnAction(e -> primaryStage.setScene(homeScene));
+		buttonPause = new Button("Pause");
+		buttonPause.setOnAction(e -> PauseMenu.pause());
 		buttonHomeScreen1 = new Button("Main menu");
 		buttonHomeScreen1.setOnAction(e -> primaryStage.setScene(homeScene));
 		buttonHomeScreen2 = new Button("Back");
@@ -74,7 +74,7 @@ public class Main extends Application {
 
 		StackPane singlePlayerLayout = new StackPane();
 		singlePlayerLayout.setPadding(new Insets(10,10,10,10));
-		singlePlayerLayout.getChildren().add(buttonHomeScreen);
+		singlePlayerLayout.getChildren().add(buttonPause);
 		singlePlayerScene = new Scene(singlePlayerLayout, 1024,768);
 
 		StackPane multiPlayerLayout = new StackPane();
