@@ -29,7 +29,6 @@ public class Main extends Application {
 
 		primaryStage.setScene(mainScreen.getScene());
 		primaryStage.show();
-
 	}
 
 	public static void main(String[] args) {
