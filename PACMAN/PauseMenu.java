@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 
 public class PauseMenu {
 
-	public static void pause(){
+	public static void pause(Stage primaryStage){
 
 		Stage pauseMenu = new Stage();
 		pauseMenu.initModality(Modality.APPLICATION_MODAL);
@@ -20,9 +20,11 @@ public class PauseMenu {
 		Button buttonResume = new Button("Resume");
 		buttonResume.setMinSize(100, 40);
 		buttonResume.setOnAction(e -> pauseMenu.close());
+
+
 		Button buttonExit = new Button("exit");
 		buttonExit.setMinSize(100, 40);
-		//buttonExit.setOnAction(e -> Main.start());
+		buttonExit.setOnAction(e -> primaryStage.setScene(mainScreen.getScene()));
 
 		HBox pauseLayout = new HBox(20);
 		pauseLayout.setPadding(new Insets(15,15,15,15));
