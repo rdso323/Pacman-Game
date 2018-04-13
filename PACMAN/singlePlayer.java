@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javafx.animation.Animation;
+//import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -62,10 +62,11 @@ public class singlePlayer extends Application {
 	private ImageView Bean_1,Bean_2;
 	private Node  Goku, Jiren, Kefla, Toppo;
 	private Text Score_Text,Time_Text,Lives_Text,TimeValue, ScoreT;
-	private Timeline TimerLiner;
+	private Timeline TimeLiner;
 	private int Score = 0;
-	private int min = 2;
-	private int sec = 0;
+	private int min = 2, sec = 0;
+	private int PowerUp = 0;
+	//private Timeline TimeLiner;
 
 	Group map = new Group();
 
@@ -79,10 +80,10 @@ public class singlePlayer extends Application {
 	boolean North, South, East, West;
 
 
-//    private static final Integer STARTTIME = 15;
-//    private Timeline timeline;
-//    private Label TimerLabel = new Label();
-//    private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
+	//    private static final Integer STARTTIME = 15;
+	//    private Timeline timeline;
+	//    private Label TimerLabel = new Label();
+	//    private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -91,7 +92,7 @@ public class singlePlayer extends Application {
 		KeflaImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,true,true);
 		ToppoImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,true,true);
 		BeanImage = new Image("file:Resources/Bean.jpg",30,30,true,true);
-//   	WallImage = new Image(BRICK_WALL_LOC,30,30,true,true);
+		//   	WallImage = new Image(BRICK_WALL_LOC,30,30,true,true);
 
 		Goku = new ImageView(GokuImage);
 		Jiren = new ImageView(JirenImage);
@@ -114,13 +115,13 @@ public class singlePlayer extends Application {
 		Time_Text .setFill(Color.WHITE);
 		Time_Text .setUnderline(true);
 
-		TimeValue = new Text(900, 400, "2:00");
+		TimeValue = new Text(910, 420, "2:00");
 		TimeValue .setFont(Font.font("ARIAL", 30));
 		TimeValue .setFill(Color.WHITE);
 
-//        timerLabel.textProperty().bind(timeSeconds.asString());
-//        timerLabel.setTextFill(Color.RED);
-//        timerLabel.setStyle("-fx-font-size: 4em;");
+		//        timerLabel.textProperty().bind(timeSeconds.asString());
+		//        timerLabel.setTextFill(Color.RED);
+		//        timerLabel.setStyle("-fx-font-size: 4em;");
 
 
 		Lives_Text = new Text(900, 576, "Lives:");
@@ -131,7 +132,7 @@ public class singlePlayer extends Application {
 
 		scene = new Scene(map, W, H, Color.BLACK);
 		Maze();
-//		moveGokuTo(W / 2, H / 2);			//Starting position
+		//		moveGokuTo(W / 2, H / 2);			//Starting position
 
 		map.getChildren().add(Jiren);
 		map.getChildren().add(Kefla);
@@ -142,6 +143,7 @@ public class singlePlayer extends Application {
 		map.getChildren().add(Lives_Text);
 		map.getChildren().addAll(Bean_1,Bean_2);
 		map.getChildren().add(ScoreT);
+		map.getChildren().add(TimeValue);
 
 
 		Jiren.relocate(300,300);
@@ -169,8 +171,8 @@ public class singlePlayer extends Application {
 		});
 
 
-//		stage.setScene(scene);								//Show the scene
-//		stage.show();
+		//		stage.setScene(scene);								//Show the scene
+		//		stage.show();
 
 
 
@@ -200,23 +202,24 @@ public class singlePlayer extends Application {
 				moveJiren();
 				moveKefla();
 				moveToppo();
-				LifeLoss();
+				LifeChange();
+				//Timer();
 
 
-//				Label myLabel = new Label("Start");
-//				myLabel.
+				//				Label myLabel = new Label("Start");
+				//				myLabel.
 
-//			       if (timeline != null) {
-//			            timeline.stop();
-//			        }
-//
-//			        timeSeconds.set(STARTTIME);
-//			        timeline = new Timeline();
-//			        timeline.getKeyFrames().add(
-//			        new KeyFrame(Duration.seconds(STARTTIME+1),
-//			        new KeyValue(timeSeconds, 0)));
-//			        timeline.playFromStart();
-//			        map.getChildren().add(timeline);
+				//			       if (timeline != null) {
+				//			            timeline.stop();
+				//			        }
+				//
+				//			        timeSeconds.set(STARTTIME);
+				//			        timeline = new Timeline();
+				//			        timeline.getKeyFrames().add(
+				//			        new KeyFrame(Duration.seconds(STARTTIME+1),
+				//			        new KeyValue(timeSeconds, 0)));
+				//			        timeline.playFromStart();
+				//			        map.getChildren().add(timeline);
 			}
 		};
 		Movement.start();
@@ -288,18 +291,35 @@ public class singlePlayer extends Application {
 		double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 -
 				(Kefla.getLayoutY() + Kefla_Height);
 
-		if(DistanceX > 0) {
-			px = 1.4;
-		}
-		else {
-			px = -1.4;
-		}
+		if(PowerUp%2 == 0) {
+			if(DistanceX > 0) {
+				px = 1.4;
+			}
+			else {
+				px = -1.4;
+			}
 
-		if(DistanceY > 0) {
-			py = 1.4;
+			if(DistanceY > 0) {
+				py = 1.4;
+			}
+			else {
+				py = -1.4;
+			}
 		}
 		else {
-			py = -1.4;
+			if(DistanceX > 0) {
+				px = -1.4;
+			}
+			else {
+				px = 1.4;
+			}
+
+			if(DistanceY > 0) {
+				py = -1.4;
+			}
+			else {
+				py = 1.4;
+			}
 		}
 
 		double kx = Kefla.getLayoutX() + Kefla_Width + px;
@@ -341,22 +361,22 @@ public class singlePlayer extends Application {
 			}
 		}
 
-//		if(Collision_AI(kx,ky)==false) {
-//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height);
-//		}
-//		else if(Collision_AI(kx-px,ky)==false){
-//			Kefla.relocate(kx-Kefla_Width-px, ky-Kefla_Height);
-//		}
-//		else if(Collision_AI(kx+px,ky)==false){
-//			Kefla.relocate(kx-Kefla_Width+px, ky-Kefla_Height);
-//		}
-//
-//		else if(Collision_AI(kx,ky-py)==false){
-//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height-py);
-//		}
-//		else if(Collision_AI(kx,ky+py)==false){
-//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height+py);
-//		}
+		//		if(Collision_AI(kx,ky)==false) {
+		//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height);
+		//		}
+		//		else if(Collision_AI(kx-px,ky)==false){
+		//			Kefla.relocate(kx-Kefla_Width-px, ky-Kefla_Height);
+		//		}
+		//		else if(Collision_AI(kx+px,ky)==false){
+		//			Kefla.relocate(kx-Kefla_Width+px, ky-Kefla_Height);
+		//		}
+		//
+		//		else if(Collision_AI(kx,ky-py)==false){
+		//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height-py);
+		//		}
+		//		else if(Collision_AI(kx,ky+py)==false){
+		//			Kefla.relocate(kx-Kefla_Width, ky-Kefla_Height+py);
+		//		}
 	}
 
 
@@ -374,18 +394,36 @@ public class singlePlayer extends Application {
 		double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 -
 				(Toppo.getLayoutY() + Toppo_Height);
 
-		if(DistanceX > 0) {
-			px = 1.6;
-		}
-		else {
-			px = -1.6;
-		}
 
-		if(DistanceY > 0) {
-			py = 1.6;
+		if(PowerUp%2 == 0) {
+			if(DistanceX > 0) {
+				px = 1.6;
+			}
+			else {
+				px = -1.6;
+			}
+
+			if(DistanceY > 0) {
+				py = 1.6;
+			}
+			else {
+				py = -1.6;
+			}
 		}
 		else {
-			py = -1.6;
+			if(DistanceX > 0) {
+				px = -1.6;
+			}
+			else {
+				px = 1.6;
+			}
+
+			if(DistanceY > 0) {
+				py = -1.6;
+			}
+			else {
+				py = 1.6;
+			}
 		}
 
 		double Toppo_midx = Toppo.getLayoutX() + Toppo_Width;
@@ -506,8 +544,8 @@ public class singlePlayer extends Application {
 		for(int i=0;i<wall.size();i++) {
 			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
 			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
-//			System.out.println(rectangle_midx);
-//			System.out.println(rectangle_midy);
+			//			System.out.println(rectangle_midx);
+			//			System.out.println(rectangle_midy);
 			double Goku_midx = x;
 			double Goku_midy = y;
 			double rectangle_width = 16;
@@ -532,8 +570,8 @@ public class singlePlayer extends Application {
 		for(int i=0;i<wall.size();i++) {
 			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
 			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
-//			System.out.println(rectangle_midx);
-//			System.out.println(rectangle_midy);
+			//			System.out.println(rectangle_midx);
+			//			System.out.println(rectangle_midy);
 			double AI_midx = x;
 			double AI_midy = y;
 			double rectangle_width = 16;
@@ -553,30 +591,30 @@ public class singlePlayer extends Application {
 	}
 
 
-//	private boolean Collision_Toppo (double x , double y) {
-//
-//		for(int i=0;i<wall.size();i++) {
-//			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
-//			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
-////			System.out.println(rectangle_midx);
-////			System.out.println(rectangle_midy);
-//			double Toppo_midx = x;
-//			double Toppo_midy = y;
-//			double rectangle_width = 16;
-//			double rectangle_height = 16;
-//			double Toppo_width = Toppo.getBoundsInLocal().getWidth()/2;
-//			double Toppo_height = Toppo.getBoundsInLocal().getHeight()/2;
-//
-//			if 		((Toppo_midx - Toppo_width) <= (rectangle_midx + rectangle_width) &&
-//					(Toppo_midy - Toppo_height) <= (rectangle_midy + rectangle_height) &&
-//					(Toppo_midx + Toppo_width) >= (rectangle_midx - rectangle_width) &&
-//					(Toppo_midy + Toppo_height) >= (rectangle_midy - rectangle_height))
-//			{
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	//	private boolean Collision_Toppo (double x , double y) {
+	//
+	//		for(int i=0;i<wall.size();i++) {
+	//			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
+	//			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
+	////			System.out.println(rectangle_midx);
+	////			System.out.println(rectangle_midy);
+	//			double Toppo_midx = x;
+	//			double Toppo_midy = y;
+	//			double rectangle_width = 16;
+	//			double rectangle_height = 16;
+	//			double Toppo_width = Toppo.getBoundsInLocal().getWidth()/2;
+	//			double Toppo_height = Toppo.getBoundsInLocal().getHeight()/2;
+	//
+	//			if 		((Toppo_midx - Toppo_width) <= (rectangle_midx + rectangle_width) &&
+	//					(Toppo_midy - Toppo_height) <= (rectangle_midy + rectangle_height) &&
+	//					(Toppo_midx + Toppo_width) >= (rectangle_midx - rectangle_width) &&
+	//					(Toppo_midy + Toppo_height) >= (rectangle_midy - rectangle_height))
+	//			{
+	//				return true;
+	//			}
+	//		}
+	//		return false;
+	//	}
 
 
 
@@ -588,8 +626,8 @@ public class singlePlayer extends Application {
 		for(int i=0;i<pellet.size();i++) {
 			double pellet_midx = pellet.get(i).getLayoutX() + (pellet.get(i).getBoundsInLocal().getWidth()/2);
 			double pellet_midy = pellet.get(i).getLayoutY() + (pellet.get(i).getBoundsInLocal().getHeight()/2);
-//			System.out.println(pellet_midx);
-//			System.out.println(pellet_midy);
+			//			System.out.println(pellet_midx);
+			//			System.out.println(pellet_midy);
 			double Goku_midx = Goku.getLayoutX() + (Goku.getBoundsInLocal().getWidth()/2);
 			double Goku_midy = Goku.getLayoutY() + (Goku.getBoundsInLocal().getHeight()/2);
 			double pellet_width = 9;
@@ -602,7 +640,7 @@ public class singlePlayer extends Application {
 					(Goku_midx + Goku_width) >= (pellet_midx - pellet_width) &&
 					(Goku_midy + Goku_height) >= (pellet_midy - pellet_height))
 			{
-//				System.out.println("Working");
+				//				System.out.println("Working");
 				map.getChildren().remove(pellet.get(i));
 			}
 			if(map.getChildren().indexOf(pellet.get(i))==-1) {
@@ -616,11 +654,12 @@ public class singlePlayer extends Application {
 
 	private void Collectibles() {
 
+		PowerUp = 0;
 		for(int i=0;i<dball.size();i++) {
 			double dball_midx = dball.get(i).getLayoutX() + (dball.get(i).getBoundsInLocal().getWidth()/2);
 			double dball_midy = dball.get(i).getLayoutY() + (dball.get(i).getBoundsInLocal().getHeight()/2);
-//			System.out.println(dball_midx);
-//			System.out.println(dball_midy);
+			//			System.out.println(dball_midx);
+			//			System.out.println(dball_midy);
 			double Goku_midx = Goku.getLayoutX() + (Goku.getBoundsInLocal().getWidth()/2);
 			double Goku_midy = Goku.getLayoutY() + (Goku.getBoundsInLocal().getHeight()/2);
 			double dball_width = 10;
@@ -633,56 +672,79 @@ public class singlePlayer extends Application {
 					(Goku_midx + Goku_width) >= (dball_midx - dball_width) &&
 					(Goku_midy + Goku_height) >= (dball_midy - dball_height))
 			{
-//				System.out.println("DBall Working");
+				//				System.out.println("DBall Working");
 				//pellet.remove(i);
+				double Goku_x = Goku.getLayoutX();
+				double Goku_y = Goku.getLayoutY();
 				map.getChildren().remove(dball.get(i));
+				map.getChildren().remove(Goku);
+				GokuImage = new Image("file:Resources/Goku_UltraInstinct.jpg",22,22,false,false);
+				Goku = new ImageView(GokuImage);
+				map.getChildren().add(Goku);
+				Goku.relocate(Goku_x,Goku_y);
+
+			}
+			
+			if(map.getChildren().indexOf(dball.get(i)) == -1) {			//PowerUp based on number of Dragon
+				PowerUp++;												//Balls collected
+				System.out.println(PowerUp);
 			}
 		}
 	}
 
 
-//	private void Timer() {
-//		TimerLiner = new Timeline(new KeyFrame (Duration.seconds(1), new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent event) {
-//				if(sec>=10) {
-//					TimeValue.setText("0" + Integer.toString(min) + ":" + Integer.toString(sec));
-//				}
-//				else {
-//					TimeValue.setText("0" + Integer.toString(min) + ":0" + Integer.toString(sec));
-//				}
-//
-//				if(sec>0) {
-//					sec -= 1;
-//				}
-//				else if(sec==0) {
-//					sec = 59;
-//					min = min - 1;
-//				}
-//			}
-//		}));
-//
-//		TimerLiner.setCycleCount(Animation.INDEFINITE);
-//		TimerLiner.play();
-//	}
-//
+	//	private void Timer() {
+	//	private Timeline makeTimeline() {
+	//		TimeLiner = new Timeline();
+	//		TimeLiner.setCycleCount(Timeline.INDEFINITE);
+	//		KeyFrame keyframe = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+	////			Timeliner = new Timeline(keyFrame);
+	//
+	//			@Override
+	//			public void handle(ActionEvent event) {
+	//				map.getChildren().remove(TimeValue);
+	//				if(sec>=10) {
+	//					TimeValue = new Text(910, 420,"0" + Integer.toString(min) + ":" + Integer.toString(sec));
+	//				}
+	//				else {
+	//					TimeValue= new Text(910, 420,"0" + Integer.toString(min) + ":0" + Integer.toString(sec));
+	//				}
+	//				
+	//				map.getChildren().add(TimeValue);
+	//
+	//				if(sec>0) {
+	//					sec -= 1;
+	//				}
+	//				else if(sec==0) {
+	//					sec = 59;
+	//					min = min - 1;
+	//				}
+	//			}
+	//		});
+	//		TimeLiner.getKeyFrames().add(keyframe);
+	//		return TimeLiner;
+	//	}
+
+	//		TimerLiner.setCycleCount(Animation.INDEFINITE);
+	//		TimerLiner.play();
+	//	}
+
 
 
 
 	private void Score(int value) {
-			map.getChildren().remove(ScoreT);
-//			System.out.println(Score);
-			Score = 50*value;
-			ScoreT = new Text(910,240,Integer.toString(Score));
-			ScoreT.setFont(Font.font("ARIAL", 30));
-			ScoreT.setFill(Color.WHITE);
-			map.getChildren().add(ScoreT);
+		map.getChildren().remove(ScoreT);
+		//			System.out.println(Score);
+		Score = 50*value;
+		ScoreT = new Text(910,240,Integer.toString(Score));
+		ScoreT.setFont(Font.font("ARIAL", 30));
+		ScoreT.setFill(Color.WHITE);
+		map.getChildren().add(ScoreT);
 	}
 
 
 
-	private void LifeLoss() {
+	private void LifeChange() {
 		double Kefla_midx = Kefla.getLayoutX() + Kefla.getBoundsInLocal().getWidth();
 		double Kefla_midy = Kefla.getLayoutY() + Kefla.getBoundsInLocal().getHeight();
 		double Toppo_midx = Toppo.getLayoutX() + Toppo.getBoundsInLocal().getWidth();
@@ -693,7 +755,7 @@ public class singlePlayer extends Application {
 		double AI_height = Kefla.getBoundsInLocal().getHeight()/2;
 		double Goku_width = Goku.getBoundsInLocal().getWidth()/2;
 		double Goku_height = Goku.getBoundsInLocal().getHeight()/2;
-//		System.out.println(map.getChildren().indexOf(Bean_2));
+		//		System.out.println(map.getChildren().indexOf(Bean_2));
 
 
 		if(map.getChildren().indexOf(Bean_2)==-1 && map.getChildren().indexOf(Bean_1)==-1) {
