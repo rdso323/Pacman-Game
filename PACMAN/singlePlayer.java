@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.omg.CORBA.portable.ApplicationException;
+
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -24,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.animation.Timeline;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.FileNotFoundException;
@@ -78,6 +81,9 @@ public class singlePlayer extends Application {
 
 	boolean North, South, East, West;
 
+	Button buttonPause;
+	static AnimationTimer Movement;
+
 
 //    private static final Integer STARTTIME = 15;
 //    private Timeline timeline;
@@ -128,6 +134,24 @@ public class singlePlayer extends Application {
 		Lives_Text.setFill(Color.WHITE);
 		Lives_Text.setUnderline(true);
 
+		buttonPause = new Button("Pause");
+		buttonPause.setMinSize(100, 50);
+		buttonPause.setTranslateX(900);
+		buttonPause.setTranslateY(25);
+		buttonPause.setOnAction(e -> PauseMenu.pause(stage));
+		buttonPause.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == (KeyCode.P)){
+					//gamePause();
+					PauseMenu.pause(stage);
+				}else if(event.getCode() == (KeyCode.ESCAPE)){
+					PauseMenu.pause(stage);
+
+				}
+			}
+		});
+
 
 		scene = new Scene(map, W, H, Color.BLACK);
 		Maze();
@@ -142,6 +166,7 @@ public class singlePlayer extends Application {
 		map.getChildren().add(Lives_Text);
 		map.getChildren().addAll(Bean_1,Bean_2);
 		map.getChildren().add(ScoreT);
+		map.getChildren().add(buttonPause);
 
 
 		Jiren.relocate(300,300);
@@ -174,7 +199,7 @@ public class singlePlayer extends Application {
 
 
 
-		AnimationTimer Movement = new AnimationTimer() {
+		Movement = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				int dx = 0, dy = 0;
@@ -734,6 +759,16 @@ public class singlePlayer extends Application {
 		}
 	}
 
+
+	public void gamePause(){
+		//Animation.Status.PAUSED;
+		Movement.stop();
+	}
+
+	public void gameResume(){
+//		Animation.Status.RUNNING;
+		Movement.start();
+	}
 
 	public static Scene getScene() {
 		return scene;
