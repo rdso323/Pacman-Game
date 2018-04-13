@@ -2,17 +2,18 @@ package PACMAN;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 public class backGMusic {
 
-	MediaPlayer player;
-
 	public void bMusic(){
 
-		Media bgMusic = new Media("file:Resources/pacman-db.mp3");
-		player = new MediaPlayer(bgMusic);
-		player.setAutoPlay(true);
-		player.setVolume(0.2);
+		String musicFile = "Resources/pacman.wav";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
+		mediaPlayer.play();
 
 	}
 

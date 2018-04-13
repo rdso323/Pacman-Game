@@ -1,5 +1,6 @@
 package PACMAN;
 
+// Imports
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -19,15 +20,18 @@ import javafx.scene.layout.BackgroundImage;
 
 public class HighScoreScreen {
 
+	// Create global variables
 	static Scene highScoreScene;
 	Button buttonHomeScreen;
 
 	public void highScore(Stage primaryStage){
 
+		// Set values to button and add and event handler
 		buttonHomeScreen = new Button("Back");
 		buttonHomeScreen.setMinSize(100, 50);
 		buttonHomeScreen.setOnAction(e -> primaryStage.setScene(mainScreen.getScene()));
 
+		// Set up layout of the scene
 		VBox highScoreLayout = new VBox(20);
 		highScoreLayout.setPadding(new Insets(10,10,10,10));
 		highScoreLayout.getChildren().add(buttonHomeScreen);
@@ -35,6 +39,7 @@ public class HighScoreScreen {
 
 	}
 
+	// Function to return the Scene created for High Scores
 	public static Scene getScene(){
 		return highScoreScene;
 	}
