@@ -26,10 +26,10 @@ public class mainScreen {
 	Button buttonHelp;
 	Button buttonHighScore;
 
-	public void menu(Stage primaryStage){
+	public void menu(Stage primaryStage) throws Exception{
 
-		SinglePlayerScreen sinPlay = new SinglePlayerScreen();
-		sinPlay.sPlay(primaryStage);
+		singlePlayer sinPlay = new singlePlayer();
+		sinPlay.start(primaryStage);
 		buttonSinglePlayer = new Button("Single Player");
 		buttonSinglePlayer.setMinSize(150, 50);
 		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
