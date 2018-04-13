@@ -2,6 +2,7 @@ package PACMAN;
 
 import javafx.scene.*;
 import javafx.stage.*;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.layout.*;
@@ -18,7 +19,7 @@ public class PauseMenu {
 		sinPlay.gamePause();
 
 		Stage pauseMenu = new Stage();
-		pauseMenu.initModality(Modality.WINDOW_MODAL);
+		pauseMenu.initModality(Modality.APPLICATION_MODAL);
 
 		pauseMenu.setTitle("Pause Menu");
 		pauseMenu.setMinWidth(250);
@@ -26,7 +27,14 @@ public class PauseMenu {
 
 		Button buttonResume = new Button("Resume");
 		buttonResume.setMinSize(100, 40);
-		buttonResume.setOnAction(e -> pauseMenu.close());
+		//buttonResume.setOnAction(e -> pauseMenu.close());
+		buttonResume.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				pauseMenu.close();
+				sinPlay.gameResume();
+			}
+		});
 		buttonResume.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent event) {
@@ -40,7 +48,14 @@ public class PauseMenu {
 
 		Button buttonExit = new Button("exit");
 		buttonExit.setMinSize(100, 40);
-		buttonExit.setOnAction(e -> primaryStage.setScene(mainScreen.getScene()));
+		buttonExit.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				primaryStage.setScene(mainScreen.getScene());
+				pauseMenu.close();
+			}
+		});
+		//setOnAction(e -> primaryStage.setScene(mainScreen.getScene()));
 
 		HBox pauseLayout = new HBox(20);
 		pauseLayout.setPadding(new Insets(15,15,15,15));

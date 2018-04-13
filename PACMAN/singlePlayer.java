@@ -735,6 +735,7 @@ public class singlePlayer extends Application {
 
 			{
 				Platform.exit();
+				//mainS.menu();
 			}
 		}
 
