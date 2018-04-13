@@ -12,7 +12,7 @@ public class backGMusic {
 
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
+		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer.play();
 
 	}

@@ -32,7 +32,7 @@ public class mainScreen {
 		sinPlay.sPlay(primaryStage);
 		buttonSinglePlayer = new Button("Single Player");
 		buttonSinglePlayer.setMinSize(150, 50);
-		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(SinglePlayerScreen.getScene()));
+		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
 
 		MultiPlayerScreen multiPlay = new MultiPlayerScreen();
 		multiPlay.mPlay(primaryStage);
