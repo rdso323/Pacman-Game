@@ -175,6 +175,7 @@ public class singlePlayer extends Application {
 		Bean_1.relocate(905,600);
 		Bean_2.relocate(945,600);
 
+
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {

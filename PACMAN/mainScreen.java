@@ -28,23 +28,22 @@ public class mainScreen {
 
 	public void menu(Stage primaryStage) throws Exception{
 
-//		countdown cd = new countdown();
-//		cd.setCD(primaryStage);
+		countdown cd = new countdown();
 		singlePlayer sinPlay = new singlePlayer();
 		sinPlay.start(primaryStage);
 		sinPlay.gamePause();
 		buttonSinglePlayer = new Button("Single Player");
 		buttonSinglePlayer.setMinSize(150, 50);
-		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
-//		buttonSinglePlayer.setOnAction(new EventHandler<ActionEvent>(){
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				primaryStage.setScene(singlePlayer.getScene());
-//				primaryStage.setScene(countdown.getScene());
-//
-//			}
-//
-//		});
+//		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
+		buttonSinglePlayer.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				primaryStage.setScene(singlePlayer.getScene());
+				cd.setCD(primaryStage);
+
+			}
+
+		});
 
 		MultiPlayerScreen multiPlay = new MultiPlayerScreen();
 		multiPlay.mPlay(primaryStage);
