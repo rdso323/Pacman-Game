@@ -69,6 +69,7 @@ public class singlePlayer extends Application {
 	private int Score = 0;
 	private int min = 2;
 	private int sec = 0;
+	private Text timeRemaining;
 
 	Group map = new Group();
 
@@ -120,9 +121,13 @@ public class singlePlayer extends Application {
 		Time_Text .setFill(Color.WHITE);
 		Time_Text .setUnderline(true);
 
-		TimeValue = new Text(900, 400, "2:00");
-		TimeValue .setFont(Font.font("ARIAL", 30));
-		TimeValue .setFill(Color.WHITE);
+//		timer time = new timer();
+//		time.lvlTime(stage);
+//		timeRemaining = time.timeRemain();
+		TimeValue = new Text();
+		//TimeValue.setText(timeRemaining);
+		TimeValue.setFont(Font.font("ARIAL", 30));
+		TimeValue.setFill(Color.WHITE);
 
 //        timerLabel.textProperty().bind(timeSeconds.asString());
 //        timerLabel.setTextFill(Color.RED);
@@ -226,7 +231,7 @@ public class singlePlayer extends Application {
 				moveJiren();
 				moveKefla();
 				moveToppo();
-				LifeLoss();
+				LifeLoss(stage);
 
 
 //				Label myLabel = new Label("Start");
@@ -708,7 +713,7 @@ public class singlePlayer extends Application {
 
 
 
-	private void LifeLoss() {
+	private void LifeLoss(Stage stage) {
 		double Kefla_midx = Kefla.getLayoutX() + Kefla.getBoundsInLocal().getWidth();
 		double Kefla_midy = Kefla.getLayoutY() + Kefla.getBoundsInLocal().getHeight();
 		double Toppo_midx = Toppo.getLayoutX() + Toppo.getBoundsInLocal().getWidth();
@@ -735,8 +740,12 @@ public class singlePlayer extends Application {
 					(Goku_midy + Goku_height) >= (Toppo_midy - AI_height))
 
 			{
-				Platform.exit();
+				//Platform.exit();
 				//mainS.menu();
+				//gamePause();
+				gamOvr gO = new gamOvr();
+				gO.gmeOvr(stage);
+
 			}
 		}
 
@@ -760,6 +769,8 @@ public class singlePlayer extends Application {
 			}
 		}
 	}
+
+
 
 
 	public void gamePause(){

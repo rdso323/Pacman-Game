@@ -62,7 +62,7 @@ public class countdown {
 				}else if(timeSeconds <= 0){
 					timeline.stop();
 					countD.close();
-					CDend();
+					CDend(primaryStage);
 				}
 			}
 		}));
@@ -92,8 +92,11 @@ public class countdown {
 
 	}
 
-	public void CDend(){
+	public void CDend(Stage primaryStage){
 		singlePlayer sinPlay = new singlePlayer();
 		sinPlay.gameResume();
+//		timer gtime = new timer();
+//		gtime.lvlTime(primaryStage);
+//		gtime.starttimer();
 	}
 }
