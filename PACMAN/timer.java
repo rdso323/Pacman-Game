@@ -16,14 +16,14 @@ public class timer {
 
 	private static final Integer stime = 120;
 	private Timeline timeline;
-	private Text timelabel = new Text();
+	//private Text timelabel = new Text();
 	private Integer timeSeconds = stime;
 
 	public void lvlTime(Stage primaryStage){
 
-		timelabel.setText(timeSeconds.toString());
-		timelabel.setFont(Font.font("ARIAL", 30));
-		timelabel.setFill(Color.WHITE);
+//		timelabel.setText(timeSeconds.toString());
+//		timelabel.setFont(Font.font("ARIAL", 30));
+//		timelabel.setFill(Color.WHITE);
 
 
 		timeline = new Timeline();
@@ -31,8 +31,8 @@ public class timer {
 		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event) {
 				timeSeconds--;
-				timelabel.setText(timeSeconds.toString());
-				System.out.println(timelabel);
+				//timelabel.setText(timeSeconds.toString());
+				//System.out.println(timeSeconds/60 +":" + timeSeconds%60);
 				if(timeSeconds <= 0){
 					gamOvr gO = new gamOvr();
 					gO.gmeOvr(primaryStage);
@@ -45,8 +45,8 @@ public class timer {
 		//scene.getChildren.add(timelabel);
 	}
 
-	public Text timeRemain(){
-		return timelabel;
+	public Integer timeRemain(){
+		return timeSeconds;
 	}
 
 	public void pauseTimer(){

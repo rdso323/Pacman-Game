@@ -15,13 +15,15 @@ public class PauseMenu {
 
 	public static void pause(Stage primaryStage){
 
-		singlePlayer sinPlay = new singlePlayer();
-		sinPlay.gamePause();
+		//singlePlayer sinPlay = new singlePlayer();
+		singlePlayer.gamePause();
 //		timer gtime = new timer();
 //		gtime.pauseTimer();
 
 		Stage pauseMenu = new Stage();
 		pauseMenu.initModality(Modality.APPLICATION_MODAL);
+		pauseMenu.initStyle(StageStyle.UNDECORATED);
+		pauseMenu.setOpacity(0.7);
 
 		pauseMenu.setTitle("Pause Menu");
 		pauseMenu.setMinWidth(250);
@@ -34,7 +36,7 @@ public class PauseMenu {
 			@Override
 			public void handle(ActionEvent arg0) {
 				pauseMenu.close();
-				sinPlay.gameResume();
+				singlePlayer.gameResume();
 				//gtime.resumeTimer();
 			}
 		});
@@ -43,7 +45,7 @@ public class PauseMenu {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == (KeyCode.P)){
 					pauseMenu.close();
-					sinPlay.gameResume();
+					singlePlayer.gameResume();
 					//gtime.resumeTimer();
 				}
 			}

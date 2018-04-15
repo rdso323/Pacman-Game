@@ -39,7 +39,7 @@ public class countdown {
 	public void setCD(Stage primaryStage){
 
 		Stage countD = new Stage();
-		countD.initModality(Modality.APPLICATION_MODAL);
+		//countD.initModality(Modality.APPLICATION_MODAL);
 		countD.initStyle(StageStyle.UNDECORATED);
 		countD.initStyle(StageStyle.TRANSPARENT);
 		countD.setOpacity(0.5);
@@ -94,6 +94,7 @@ public class countdown {
 
 	public void CDend(Stage primaryStage){
 		singlePlayer sinPlay = new singlePlayer();
+		//sinPlay.lvlTime(primaryStage);
 		sinPlay.gameResume();
 //		timer gtime = new timer();
 //		gtime.lvlTime(primaryStage);

@@ -1,6 +1,6 @@
 package PACMAN;
 
-import java.awt.event.ActionEvent;
+//import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,6 +15,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.image.*;
@@ -64,12 +65,22 @@ public class singlePlayer extends Application {
 	private Image GokuImage, JirenImage, KeflaImage, ToppoImage, BeanImage;
 	private ImageView Bean_1,Bean_2;
 	private Node  Goku, Jiren, Kefla, Toppo;
-	private Text Score_Text,Time_Text,Lives_Text,TimeValue, ScoreT;
+	private Text Score_Text,Time_Text,Lives_Text;
+
+
+	private static Text TimeValue;
+
+
+	private Text ScoreT;
 	private Timeline TimerLiner;
 	private int Score = 0;
-	private int min = 2;
-	private int sec = 0;
-	private Text timeRemaining;
+	private static Integer min = 2;
+	private static Integer sec = 0;
+	public Integer minutesR,secondsR;
+	private static final Integer stime = 120;
+	private static Timeline timeline;
+	//private Text timelabel = new Text();
+	private static Integer timeSeconds = stime;
 
 	Group map = new Group();
 
@@ -123,11 +134,18 @@ public class singlePlayer extends Application {
 
 //		timer time = new timer();
 //		time.lvlTime(stage);
+//		minutesR = (time.timeRemain())/60;
+//		secondsR = (time.timeRemain())%60;
 //		timeRemaining = time.timeRemain();
-		TimeValue = new Text();
-		//TimeValue.setText(timeRemaining);
+		//System.out.println(time.timeRemain());
+
+		TimeValue = new Text(910,430,"2:00");
+		//TimeValue = new Text(910,420,minutesR.toString() + ":" + secondsR.toString());
+		//TimeValue.setText(minutesR.toString() + ":" + secondsR.toString());
 		TimeValue.setFont(Font.font("ARIAL", 30));
 		TimeValue.setFill(Color.WHITE);
+		lvlTime(stage);
+		//System.out.println(minutesR/60 + ":" + secondsR%60);
 
 //        timerLabel.textProperty().bind(timeSeconds.asString());
 //        timerLabel.setTextFill(Color.RED);
@@ -150,8 +168,10 @@ public class singlePlayer extends Application {
 				if (event.getCode() == (KeyCode.P)){
 					//gamePause();
 					PauseMenu.pause(stage);
+					//timeline.pause();
 				}else if(event.getCode() == (KeyCode.ESCAPE)){
 					PauseMenu.pause(stage);
+					//timeline.pause();
 
 				}
 			}
@@ -172,6 +192,7 @@ public class singlePlayer extends Application {
 		map.getChildren().addAll(Bean_1,Bean_2);
 		map.getChildren().add(ScoreT);
 		map.getChildren().add(buttonPause);
+		map.getChildren().add(TimeValue);
 
 
 		Jiren.relocate(300,300);
@@ -226,7 +247,9 @@ public class singlePlayer extends Application {
 				//                if (running) { dx *= 3; dy *= 3; }
 
 
-
+				//TimeValue.setText(minutesR.toString() + ":" + secondsR.toString());
+				//System.out.println(time.timeRemain());
+				//timeR(stage);
 				moveGokuBy(dx, dy);
 				moveJiren();
 				moveKefla();
@@ -698,6 +721,21 @@ public class singlePlayer extends Application {
 //		TimerLiner.play();
 //	}
 //
+//	private void timeR(Stage stage){
+//		map.getChildren().remove(TimeValue);
+//		timer time = new timer();
+//		time.lvlTime(stage);
+//		//minutesR = (time.timeRemain())/60;
+//		secondsR = (time.timeRemain());
+////		timeRemaining = time.timeRemain();
+//		//System.out.println(time.timeRemain());
+//		TimeValue = new Text(910,420,secondsR.toString());
+//		TimeValue.setText(minutesR.toString() + ":" + secondsR.toString());
+//		TimeValue.setFont(Font.font("ARIAL", 30));
+//		TimeValue.setFill(Color.WHITE);
+//		//System.out.println(minutesR/60 + ":" + secondsR%60);
+//		map.getChildren().add(TimeValue);
+//	}
 
 
 
@@ -769,18 +807,53 @@ public class singlePlayer extends Application {
 			}
 		}
 	}
+	public static void lvlTime(Stage primaryStage){
+
+//		timelabel.setText(timeSeconds.toString());
+//		timelabel.setFont(Font.font("ARIAL", 30));
+//		timelabel.setFill(Color.WHITE);
 
 
 
+		timeline = new Timeline();
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				timeSeconds--;
+				//timelabel.setText(timeSeconds.toString());
+				//System.out.println(timeSeconds/60 +":" + timeSeconds%60);
+				//TimeValue.setText((timeSeconds/60).toString() +":" + (timeSeconds%60).toString());
+				min = timeSeconds/60;
+				sec = timeSeconds%60;
+				//System.out.println(min.to);
+				//map.getChildren().remove(TimeValue);
+				TimeValue.setText(min.toString() + ":" + sec.toString());
+				//map.getChildren().add(TimeValue);
+				if(timeSeconds <= 0){
+					gamOvr gO = new gamOvr();
+					gO.gmeOvr(primaryStage);
+					timeline.stop();
+				}
+			}
+		}));
+		timeline.playFromStart();
 
-	public void gamePause(){
-		//Animation.Status.PAUSED;
-		Movement.stop();
+		//scene.getChildren.add(timelabel);
 	}
 
-	public void gameResume(){
+
+
+
+	public static void gamePause(){
+		//Animation.Status.PAUSED;
+		Movement.stop();
+		timeline.pause();
+	}
+
+	public static void gameResume(){
 //		Animation.Status.RUNNING;
 		Movement.start();
+		timeline.play();
 	}
 
 	public static Scene getScene() {
