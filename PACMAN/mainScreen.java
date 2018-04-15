@@ -34,11 +34,11 @@ public class mainScreen {
 		buttonSinglePlayer.setMinSize(150, 50);
 		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
 
-		MultiPlayerScreen multiPlay = new MultiPlayerScreen();
-		multiPlay.mPlay(primaryStage);
+		multiPlayer multiPlay = new multiPlayer();
+	//	multiPlay.start(primaryStage);
 		buttonMultiPlayer = new Button("Multi-Player");
 		buttonMultiPlayer.setMinSize(150, 50);
-		buttonMultiPlayer.setOnAction(e -> primaryStage.setScene(MultiPlayerScreen.getScene()));
+		buttonMultiPlayer.setOnAction(e -> primaryStage.setScene(multiPlayer.getScene()));
 
 		HelpScreen helpS = new HelpScreen();
 		helpS.hmenu(primaryStage);

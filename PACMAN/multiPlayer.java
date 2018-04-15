@@ -1,17 +1,12 @@
 package PACMAN;
 
-//import javafx.event.ActionEvent;
 import java.io.File;
-//import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-//import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -27,14 +22,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-//import javafx.util.Duration;
 
 /**
  * Hold down an arrow key to have your character move around the screen.
  * Hold down the shift key to have the character run.
  */
-public class singlePlayer extends Application {
+public class multiPlayer extends Application {
 
 	private static final double W = 1024, H = 768;
 
@@ -62,22 +55,8 @@ public class singlePlayer extends Application {
 	private Image GokuImage, JirenImage, KeflaImage, ToppoImage, HitImage, BeanImage;
 	private ImageView Bean_1,Bean_2;
 	private Node  Goku, Jiren, Kefla, Toppo, Hit;
-	private Text Score_Text,Time_Text,Lives_Text, ScoreT;
-
-
-	private static Text TimeValue;
-	private Integer min = 2;
-	private Integer sec = 0;
-	public Integer minutesR,secondsR;
-	private Integer stime = 120;
-	private Timeline timeline_1, timeline_2;
-	private Integer timeSeconds = stime;
-
-	private Integer PowerUp_Cooldown = 8;			//Display time till powerup wears off
-	private static Text PowerUp_Cooldown_Text;
-
-
-	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;		//Used to keep track of score
+	private Text Score_Text,Time_Text,Lives_Text,TimeValue, ScoreT;
+	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;
 	private int PowerUp = 0;
 	private String GokuImageString;
 	private int Toppo_Count = 0, Toppo_Count_Respawn = 0;		//Count to change direction
@@ -92,7 +71,7 @@ public class singlePlayer extends Application {
 	private ArrayList<ImageView> Lives = new ArrayList<ImageView>();
 
 
-	boolean North, South, East, West;
+	boolean North_1, South_1, East_1, West_1, North_2, South_2, East_2, West_2;
 
 
 	//    private static final Integer STARTTIME = 15;
@@ -101,7 +80,8 @@ public class singlePlayer extends Application {
 	//    private IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
+		// TODO Auto-generated method stub	
 		GokuImage = new Image("file:Resources/Goku.jpg",22,22,false,false);
 		JirenImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
 		KeflaImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
@@ -136,9 +116,9 @@ public class singlePlayer extends Application {
 		TimeValue .setFont(Font.font("ARIAL", 30));
 		TimeValue .setFill(Color.WHITE);
 
-		PowerUp_Cooldown_Text = new Text(400,80,"Time to Cooldown:");
-		PowerUp_Cooldown_Text.setFont(Font.font("ARIAL", 15));
-		PowerUp_Cooldown_Text.setFill(Color.WHITE);
+		//        timerLabel.textProperty().bind(timeSeconds.asString());
+		//        timerLabel.setTextFill(Color.RED);
+		//        timerLabel.setStyle("-fx-font-size: 4em;");
 
 
 		Lives_Text = new Text(900, 576, "Lives:");
@@ -162,7 +142,6 @@ public class singlePlayer extends Application {
 		map.getChildren().addAll(Bean_1,Bean_2);
 		map.getChildren().add(ScoreT);
 		map.getChildren().add(TimeValue);
-		map.getChildren().add(PowerUp_Cooldown_Text);
 
 
 		Jiren.relocate(200,197);
@@ -172,20 +151,35 @@ public class singlePlayer extends Application {
 		Bean_1.relocate(905,600);
 		Bean_2.relocate(945,600);
 
+
+
+
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 				if(event.getCode() == KeyCode.UP) {
-					North = true; East = false; South = false; West = false;
+					North_1 = true; East_1 = false; South_1 = false; West_1 = false;
 				}
 				if(event.getCode() == KeyCode.LEFT) {
-					West = true; North = false; South = false; East = false;
+					West_1 = true; North_1 = false; South_1 = false; East_1 = false;
 				}
 				if(event.getCode() == KeyCode.DOWN) {
-					South = true; East = false; North = false; West = false;
+					South_1 = true; East_1 = false; North_1 = false; West_1 = false;
 				}
 				if(event.getCode() == KeyCode.RIGHT) {
-					East = true; North = false; South = false; West = false;
+					East_1 = true; North_1 = false; South_1 = false; West_1 = false;
+				}
+				if(event.getCode() == KeyCode.W) {
+					North_2 = true; East_2 = false; South_2 = false; West_2 = false;
+				}
+				if(event.getCode() == KeyCode.A) {
+					West_2 = true; North_2 = false; South_2 = false; East_2 = false;
+				}
+				if(event.getCode() == KeyCode.S) {
+					South_2 = true; East_2 = false; North_2 = false; West_2 = false;
+				}
+				if(event.getCode() == KeyCode.D) {
+					East_2 = true; North_2 = false; South_2 = false; West_2 = false;
 				}
 			}
 		});
@@ -193,42 +187,49 @@ public class singlePlayer extends Application {
 		AnimationTimer Movement = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				int dx = 0, dy = 0;
-
-				if (North){
+				int dx = 0, dy = 0, jx = 0, jy = 0;
+				if (North_1){
 					dy -= 2;					//Speed of movement
 				}
-				else if (East){
+				else if (East_1){
 					dx += 2;
 				}
-
-				else if (South){
+				else if (South_1){
 					dy += 2;
 				}
-				else if (West){
+				else if (West_1){
 					dx -= 2;
 				}
-				//                if (running) { dx *= 3; dy *= 3; }
 
+
+				if (North_2){
+					jy -= 1.9;					
+				}
+				else if (East_2){
+					jx += 1.6;
+				}
+				else if (South_2){
+					jy += 1.9;
+				}
+				else if (West_2){
+					jx -= 1.9;
+				}
 
 
 				moveGokuBy(dx, dy);
-				moveJiren();
+				moveJirenBy(jx,jy);
 				moveKefla();
 				moveToppo();
 				moveHit();
 				LifeChange();
-				//Timer();
+				//				//Timer();
 				GameWin();
 
 			}
 		};
 		Movement.start();
-		//		lvlTime(stage);
-		Clock_Timer();
-		Clock_Collectable();
-
 	}
+
 
 	private void moveGokuBy(int dx, int dy) {
 		if (dx == 0 && dy == 0) return;
@@ -238,7 +239,6 @@ public class singlePlayer extends Application {
 
 		double x = Goku_Width + Goku.getLayoutX() + dx;
 		double y = Goku_Height+ Goku.getLayoutY() + dy;
-		//       System.out.println(Goku.getLayoutY());
 		moveGokuTo(x, y);						//Moves mid point to this point
 	}
 
@@ -251,8 +251,8 @@ public class singlePlayer extends Application {
 		//		y - Goku_Height >= 0 &&
 		//		y + Goku_Height <= H) {
 
-		if(Goku.getLayoutY()>=H) {									//Used for moving between top and bottom
-			Goku.relocate(Goku.getLayoutX(),(-2*Goku_Height)+0.1);	//openings
+		if(Goku.getLayoutY()>=H) {
+			Goku.relocate(Goku.getLayoutX(),(-2*Goku_Height)+0.1);
 		}
 		else if(Goku.getLayoutY()+(2*Goku_Height)<=0) {
 			Goku.relocate(Goku.getLayoutX(),H-0.1);
@@ -261,85 +261,35 @@ public class singlePlayer extends Application {
 			Goku.relocate(x - Goku_Width , y - Goku_Height);
 		}
 
-		//		}
-
 		Pellets();
 		Collectibles();
+
+	}
+	private void moveJirenBy(int jx, int jy) {
+		if (jx == 0 && jy == 0) return;
+
+		final double Jiren_Width = Jiren.getBoundsInLocal().getWidth()  / 2;			//Mid point
+		final double Jiren_Height = Jiren.getBoundsInLocal().getHeight() / 2;
+
+		double x = Jiren_Width + Jiren.getLayoutX() + jx;
+		double y = Jiren_Height+ Jiren.getLayoutY() + jy;
+		moveJirenTo(x, y);						//Moves mid point to this point
 	}
 
-	private void moveJiren() {
-
-		double px = 0;
-		double py = 0;
-
+	private void moveJirenTo(double x, double y) {
 		final double Jiren_Width = Jiren.getBoundsInLocal().getWidth() / 2;
 		final double Jiren_Height = Jiren.getBoundsInLocal().getHeight() / 2;
 
-		double DistanceX = Goku.getLayoutX() + Goku.getBoundsInLocal().getWidth() / 2 -
-				(Jiren.getLayoutX() + Jiren_Width);
 
-		double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 -
-				(Jiren.getLayoutY() + Jiren_Height);
-
-
-		if(PowerUp%2 == 0) {
-			if(DistanceX > 0) {
-				px = 1.6;
-			}
-			else if(DistanceX < 0){
-				px = -1.6;
-			}
-
-			if(DistanceY > 0) {
-				py = 1.6;
-			}
-			else if(DistanceY < 0){
-				py = -1.6;
-			}
+		if(Jiren.getLayoutY()>=H) {
+			Jiren.relocate(Jiren.getLayoutX(),(-2*Jiren_Height)+0.1);
 		}
-		else {
-			if(DistanceX > 0) {
-				px = -1.6;
-			}
-			else if(DistanceX < 0){
-				px = 1.6;
-			}
-
-			if(DistanceY > 0) {
-				py = -1.6;
-			}
-			else if(DistanceY < 0) {
-				py = 1.6;
-			}
+		else if(Jiren.getLayoutY()+(2*Jiren_Height)<=0) {
+			Jiren.relocate(Jiren.getLayoutX(),H-0.1);
 		}
-
-		double Jiren_midx = Jiren.getLayoutX() + Jiren_Width;
-		double Jiren_midy = Jiren.getLayoutY() + Jiren_Height;
-		double kx = Jiren_midx + px;
-		double ky = Jiren_midy + py;
-
-		if (kx - Jiren_Width >= 0 &&			//Stops character from going out of bounds
-				kx + Jiren_Width <= W &&
-				ky - Jiren_Height >= 0 &&
-				ky + Jiren_Height <= H) {
-
-			if(Collision_AI(kx,ky)==false) {
-				Jiren.relocate(kx-Jiren_Width, ky-Jiren_Height);
-			}
-			else if(Collision_AI(kx,ky-py)==false){
-				Jiren.relocate(kx-Jiren_Width, ky-Jiren_Height-py);
-			}
-			else if(Collision_AI(kx+px,ky)==false){
-				Jiren.relocate(kx-Jiren_Width+px, ky-Jiren_Height);
-			}
-			else if(Collision_AI(kx,ky+py)==false){
-				Jiren.relocate(kx-Jiren_Width, ky-Jiren_Height+py);
-			}
-			else if(Collision_AI(kx-px,ky)==false){
-				Jiren.relocate(kx-Jiren_Width-px, ky-Jiren_Height);
-			}
+		else if(Collision_AI(x,y) == false) {
+			Jiren.relocate(x - Jiren_Width , y - Jiren_Height);
 		}
-
 
 	}
 
@@ -640,28 +590,7 @@ public class singlePlayer extends Application {
 				Goku.relocate((32*(i%32))+5,(32*j)+5);			//Starting position ((32-22)/2=5)
 			}
 		}
-		////
-		//		Scanner Import_Maze = new Scanner(new File("Maze_CSV.csv"));
-		//        Import_Maze.useDelimiter(",");
-		//        int i = 0;
-		//
-		//        while(Import_Maze.hasNext()){
-		//        	Maze_Array[i] =  Integer.parseInt(Import_Maze.next());
-		//        	i++;
-		//        }
-		//
-		//        Import_Maze.close();
-		//
-		//        for(int x=0;x<=Maze_Array.length;x++) {
-		//        	System.out.println(Maze_Array[x]);
-		//         }
-		//
-		//
-		////
-		//
-		//	}
-	}
-
+	}	
 
 
 	private boolean Collision_Goku (double x , double y) {
@@ -715,35 +644,6 @@ public class singlePlayer extends Application {
 		return false;
 	}
 
-
-	//	private boolean Collision_Toppo (double x , double y) {
-	//
-	//		for(int i=0;i<wall.size();i++) {
-	//			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
-	//			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
-	////			System.out.println(rectangle_midx);
-	////			System.out.println(rectangle_midy);
-	//			double Toppo_midx = x;
-	//			double Toppo_midy = y;
-	//			double rectangle_width = 16;
-	//			double rectangle_height = 16;
-	//			double Toppo_width = Toppo.getBoundsInLocal().getWidth()/2;
-	//			double Toppo_height = Toppo.getBoundsInLocal().getHeight()/2;
-	//
-	//			if 		((Toppo_midx - Toppo_width) <= (rectangle_midx + rectangle_width) &&
-	//					(Toppo_midy - Toppo_height) <= (rectangle_midy + rectangle_height) &&
-	//					(Toppo_midx + Toppo_width) >= (rectangle_midx - rectangle_width) &&
-	//					(Toppo_midy + Toppo_height) >= (rectangle_midy - rectangle_height))
-	//			{
-	//				return true;
-	//			}
-	//		}
-	//		return false;
-	//	}
-
-
-
-
 	private void Pellets() {
 
 		int count = 0;	//Check the number of pellets that have been eaten
@@ -779,7 +679,7 @@ public class singlePlayer extends Application {
 
 	private void Collectibles() {
 
-		int PowerUp_Total = 0;
+		PowerUp = 0;
 		for(int i=0;i<dball.size();i++) {
 			double dball_midx = dball.get(i).getLayoutX() + (dball.get(i).getBoundsInLocal().getWidth()/2);
 			double dball_midy = dball.get(i).getLayoutY() + (dball.get(i).getBoundsInLocal().getHeight()/2);
@@ -801,34 +701,18 @@ public class singlePlayer extends Application {
 				//pellet.remove(i);
 
 				map.getChildren().remove(dball.get(i));
+
+
 			}
 
 			if(map.getChildren().indexOf(dball.get(i)) == -1) {			//PowerUp based on number of Dragon
-				PowerUp_Total++;												//Balls collected
+				PowerUp++;												//Balls collected
 				//				System.out.println(PowerUp);
 			}
 
 		}
 
-
-		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==500) {
-			PowerUp = 0;
-			PowerUp_Countdown = 0;
-		}
-		else {
-			Collectable_Count = PowerUp_Total;
-			PowerUp = 1;
-			PowerUp_Countdown--;
-		}
-		if(PowerUp_Countdown<=0) {
-			PowerUp_Countdown = 500;
-		}
-
-		Collectable_Count = PowerUp_Total;
-
-		//		System.out.println(PowerUp_Countdown);
-
-		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on 
+		if(PowerUp%2==1 && GokuImageString == "Goku") {			//Change the image base on 
 			double Goku_x = Goku.getLayoutX();					//number of Dballs collected
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
@@ -839,7 +723,7 @@ public class singlePlayer extends Application {
 			GokuImageString = "Goku_UltraInstinct";
 			//			System.out.println("in 1");
 		}
-		else if(PowerUp==0 && GokuImageString == "Goku_UltraInstinct") {
+		else if(PowerUp%2==0 && GokuImageString == "Goku_UltraInstinct") {
 			double Goku_x = Goku.getLayoutX();
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
@@ -887,7 +771,7 @@ public class singlePlayer extends Application {
 		//		Music Site: http://soundbible.com/1945-Smashing.html
 
 
-		if(PowerUp==0) {				//If in regular form
+		if(PowerUp%2==0) {				//If in regular form
 
 			if(map.getChildren().indexOf(Bean_2)==-1 && map.getChildren().indexOf(Bean_1)==-1) {
 
@@ -1035,45 +919,9 @@ public class singlePlayer extends Application {
 	}
 
 
-	private void Clock_Timer(){
-		timeline_1 = new Timeline();
-		timeline_1.setCycleCount(Timeline.INDEFINITE);
-		timeline_1.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
-
-			public void handle(ActionEvent event) {
-				timeSeconds--;
-				min = timeSeconds/60;
-				sec = timeSeconds%60;
-				TimeValue.setText(min.toString() + ":" + sec.toString());	
-			}
-		}));
-
-		timeline_1.playFromStart();
-	}
-
-	private void Clock_Collectable() {
-
-		if(PowerUp == 0) {
-			PowerUp_Cooldown = 8;
-		}
-		else {
-			timeline_2 = new Timeline();
-			timeline_2.setCycleCount(Timeline.INDEFINITE);
-			timeline_2.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
-				public void handle(ActionEvent event) {
-					PowerUp_Cooldown_Text.setText("Time to Cooldown:" + PowerUp_Cooldown.toString());
-					PowerUp_Cooldown--;
-					System.out.println(PowerUp_Cooldown);
-				}
-			}));
-
-			//		System.out.println(PowerUp_Cooldown);
-			timeline_2.playFromStart();
-		}
-	}
-
 
 	public static Scene getScene() {
 		return scene;
-	}	
+	}
+
 }

@@ -3,6 +3,7 @@ package PACMAN;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
+import java.nio.file.Paths;
 
 public class backGMusic {
 
@@ -16,5 +17,13 @@ public class backGMusic {
 		mediaPlayer.play();
 
 	}
+	
+//	MediaPlayer mediaPlayer;
+//	public void bMusic(){
+//	    String bip = "file:Resources/pacman-db.mp3";
+//	    Media hit = new Media("file:Resources/pacman.wav");
+//	    mediaPlayer = new MediaPlayer(hit);
+//	    mediaPlayer.play();
+//	}
 
 }
