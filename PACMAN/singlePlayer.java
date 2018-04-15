@@ -842,7 +842,9 @@ public class singlePlayer extends Application {
 	}
 
 
-
+	public static void resettimer(){
+		timeSeconds = stime;
+	}
 
 	public static void gamePause(){
 		//Animation.Status.PAUSED;

@@ -93,9 +93,10 @@ public class countdown {
 	}
 
 	public void CDend(Stage primaryStage){
-		singlePlayer sinPlay = new singlePlayer();
+		//singlePlayer sinPlay = new singlePlayer();
 		//sinPlay.lvlTime(primaryStage);
-		sinPlay.gameResume();
+		singlePlayer.resettimer();
+		singlePlayer.gameResume();
 //		timer gtime = new timer();
 //		gtime.lvlTime(primaryStage);
 //		gtime.starttimer();

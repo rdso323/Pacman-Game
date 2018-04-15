@@ -23,7 +23,7 @@ public class PauseMenu {
 		Stage pauseMenu = new Stage();
 		pauseMenu.initModality(Modality.APPLICATION_MODAL);
 		pauseMenu.initStyle(StageStyle.UNDECORATED);
-		pauseMenu.setOpacity(0.7);
+		//pauseMenu.setOpacity(0.9);
 
 		pauseMenu.setTitle("Pause Menu");
 		pauseMenu.setMinWidth(250);
