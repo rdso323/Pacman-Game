@@ -223,15 +223,15 @@ public class HighScoreScreen {
 			}
 
 		} catch (FileNotFoundException e) {
-			player1 = "no one";
+			player1 = "NA";
 			score1 = 0;
-			player2 = "no one";
+			player2 = "NA";
 			score2 = 0;
-			player3 = "no one";
+			player3 = "NA";
 			score3 = 0;
-			player4 = "no one";
+			player4 = "NA";
 			score4 = 0;
-			player5 = "no one";
+			player5 = "NA";
 			score5 = 0;
 		} finally{
 			try {
