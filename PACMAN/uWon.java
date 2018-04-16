@@ -1,8 +1,6 @@
 package PACMAN;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,9 +15,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class gamOvr {
+public class uWon {
 
-	public void gmeOvr(Stage primaryStage){
+	public void win(Stage primaryStage){
 
 		//singlePlayer sinPlay = new singlePlayer();
 		//singlePlayer.gamePause();
@@ -31,7 +29,7 @@ public class gamOvr {
 		gameO.setOpacity(0.5);
 
 		Text GOText = new Text();
-		GOText.setText("Game Over");
+		GOText.setText("Congrats You Win!");
 		GOText.setFont(Font.font("ARIAL", 75));
 		GOText.setFill(Color.RED);
 

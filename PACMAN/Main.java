@@ -21,6 +21,7 @@ public class Main extends Application {
 		bgm.bMusic();
 
 		primaryStage.setScene(mainScreen.getScene());
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 

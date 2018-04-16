@@ -28,22 +28,27 @@ public class mainScreen {
 
 	public void menu(Stage primaryStage) throws Exception{
 
-		countdown cd = new countdown();
-		singlePlayer sinPlay = new singlePlayer();
-		sinPlay.start(primaryStage);
-		sinPlay.gamePause();
+//		countdown cd = new countdown();
+//		singlePlayer sinPlay = new singlePlayer();
+//		sinPlay.start(primaryStage);
+//		sinPlay.gamePause();
+//		buttonSinglePlayer = new Button("Single Player");
+//		buttonSinglePlayer.setMinSize(150, 50);
+////		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
+//		buttonSinglePlayer.setOnAction(new EventHandler<ActionEvent>(){
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				primaryStage.setScene(singlePlayer.getScene());
+//				cd.setCD(primaryStage);
+//
+//			}
+//
+//		});
+		singlePlayerStart sStart = new singlePlayerStart();
+		sStart.sinStart(primaryStage);
 		buttonSinglePlayer = new Button("Single Player");
 		buttonSinglePlayer.setMinSize(150, 50);
-//		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
-		buttonSinglePlayer.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent arg0) {
-				primaryStage.setScene(singlePlayer.getScene());
-				cd.setCD(primaryStage);
-
-			}
-
-		});
+		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayerStart.getScene()));
 
 		MultiPlayerScreen multiPlay = new MultiPlayerScreen();
 		multiPlay.mPlay(primaryStage);
@@ -61,7 +66,7 @@ public class mainScreen {
 		hiScore.highScore(primaryStage);
 		buttonHighScore = new Button("High Score");
 		buttonHighScore.setMinSize(150, 50);
-		buttonHighScore.setOnAction(e -> primaryStage.setScene(HighScoreScreen.getScene()));
+		//buttonHighScore.setOnAction(e -> primaryStage.setScene(HighScoreScreen.getScene()));
 
 
 		VBox homeLayout1 = new VBox(20);

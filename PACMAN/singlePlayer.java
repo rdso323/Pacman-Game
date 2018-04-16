@@ -161,18 +161,30 @@ public class singlePlayer extends Application {
 		buttonPause.setMinSize(100, 50);
 		buttonPause.setTranslateX(900);
 		buttonPause.setTranslateY(25);
-		buttonPause.setOnAction(e -> PauseMenu.pause(stage));
+		buttonPause.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				gamePause();
+				PauseMenu.pause(stage);
+			}
+
+		});
 		buttonPause.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode() == (KeyCode.P)){
-					//gamePause();
+					gamePause();
 					PauseMenu.pause(stage);
 					//timeline.pause();
 				}else if(event.getCode() == (KeyCode.ESCAPE)){
+					gamePause();
 					PauseMenu.pause(stage);
 					//timeline.pause();
 
+				}else if (event.getCode() == (KeyCode.PAGE_DOWN)){
+					//gamePause();
+					timeSeconds = 1;
+					//timeline.pause();
 				}
 			}
 		});
@@ -780,7 +792,7 @@ public class singlePlayer extends Application {
 			{
 				//Platform.exit();
 				//mainS.menu();
-				//gamePause();
+				gamePause();
 				gamOvr gO = new gamOvr();
 				gO.gmeOvr(stage);
 
@@ -813,7 +825,17 @@ public class singlePlayer extends Application {
 //		timelabel.setFont(Font.font("ARIAL", 30));
 //		timelabel.setFill(Color.WHITE);
 
-
+//		Button pgdn = new Button("pagedown");
+//		pgdn.setOnKeyPressed(new EventHandler<KeyEvent>(){
+//			@Override
+//			public void handle(KeyEvent event){
+//				if (event.getCode() == (KeyCode.PAGE_DOWN)){
+//					//gamePause();
+//					timeSeconds = 1;
+//					//timeline.pause();
+//				}
+//				}
+//			});
 
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
@@ -827,9 +849,14 @@ public class singlePlayer extends Application {
 				sec = timeSeconds%60;
 				//System.out.println(min.to);
 				//map.getChildren().remove(TimeValue);
-				TimeValue.setText(min.toString() + ":" + sec.toString());
+				if(sec < 10){
+					TimeValue.setText(min.toString() + ":0" + sec.toString());
+				}else{
+					TimeValue.setText(min.toString() + ":" + sec.toString());
+				}
 				//map.getChildren().add(TimeValue);
 				if(timeSeconds <= 0){
+					gamePause();
 					gamOvr gO = new gamOvr();
 					gO.gmeOvr(primaryStage);
 					timeline.stop();

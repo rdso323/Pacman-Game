@@ -16,7 +16,7 @@ public class PauseMenu {
 	public static void pause(Stage primaryStage){
 
 		//singlePlayer sinPlay = new singlePlayer();
-		singlePlayer.gamePause();
+		//singlePlayer.gamePause();
 //		timer gtime = new timer();
 //		gtime.pauseTimer();
 
