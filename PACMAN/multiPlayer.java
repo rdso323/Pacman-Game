@@ -2,11 +2,14 @@ package PACMAN;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -22,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Hold down an arrow key to have your character move around the screen.
@@ -55,12 +59,22 @@ public class multiPlayer extends Application {
 	private Image GokuImage, JirenImage, KeflaImage, ToppoImage, HitImage, BeanImage;
 	private ImageView Bean_1,Bean_2;
 	private Node  Goku, Jiren, Kefla, Toppo, Hit;
-	private Text Score_Text,Time_Text,Lives_Text,TimeValue, ScoreT;
+	private Text Score_Text,Time_Text,Lives_Text,ScoreT;
+	
+	private static Text TimeValue;
+	private Integer min = 2;
+	private Integer sec = 0;
+	public Integer minutesR,secondsR;
+	private Integer stime = 120;
+	private Timeline timeline_1;
+	private Integer timeSeconds = stime;
+	
 	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;
 	private int PowerUp = 0;
 	private String GokuImageString;
-	private int Toppo_Count = 0, Toppo_Count_Respawn = 0;		//Count to change direction
-	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 500;
+	private int Toppo_Count = 0, Toppo_Count_Respawn = 0, Toppo_Secondary_Count = 0;		//Count to change direction
+	private int Toppo_Direction = 0;
+	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 480;
 
 	Group map = new Group();
 
@@ -82,11 +96,11 @@ public class multiPlayer extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub	
-		GokuImage = new Image("file:Resources/Goku.jpg",22,22,false,false);
-		JirenImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		KeflaImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		ToppoImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		HitImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
+		GokuImage = new Image("file:Resources/Goku.png",22,22,false,false);
+		JirenImage = new Image("file:Resources/Jiren.png",22,22,false,false);
+		KeflaImage = new Image("file:Resources/Kefla.png",22,22,false,false);
+		ToppoImage = new Image("file:Resources/Toppo.png",22,22,false,false);
+		HitImage = new Image("file:Resources/Hit.png",22,22,false,false);
 		BeanImage = new Image("file:Resources/Bean.jpg",30,30,true,true);
 		GokuImageString = "Goku";  						//Used to change image when collectible is collected
 
@@ -116,11 +130,6 @@ public class multiPlayer extends Application {
 		TimeValue .setFont(Font.font("ARIAL", 30));
 		TimeValue .setFill(Color.WHITE);
 
-		//        timerLabel.textProperty().bind(timeSeconds.asString());
-		//        timerLabel.setTextFill(Color.RED);
-		//        timerLabel.setStyle("-fx-font-size: 4em;");
-
-
 		Lives_Text = new Text(900, 576, "Lives:");
 		Lives_Text.setFont(Font.font("ARIAL", 30));
 		Lives_Text.setFill(Color.WHITE);
@@ -129,6 +138,7 @@ public class multiPlayer extends Application {
 
 		scene = new Scene(map, W, H, Color.BLACK);
 		Maze();
+		Clock_Timer();
 		//		moveGokuTo(W / 2, H / 2);			//Starting position
 
 		map.getChildren().add(Jiren);
@@ -139,17 +149,17 @@ public class multiPlayer extends Application {
 		map.getChildren().add(Score_Text);
 		map.getChildren().add(Time_Text);
 		map.getChildren().add(Lives_Text);
-		map.getChildren().addAll(Bean_1,Bean_2);
+		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
 		map.getChildren().add(TimeValue);
 
 
 		Jiren.relocate(200,197);
 		Kefla.relocate(640,453);
-		Toppo.relocate(805,300);
+		Toppo.relocate(421,295);
 		Hit.relocate(421,390);
-		Bean_1.relocate(905,600);
-		Bean_2.relocate(945,600);
+		Bean_1.relocate(925,600);
+//		Bean_2.relocate(945,600);
 
 
 
@@ -187,32 +197,50 @@ public class multiPlayer extends Application {
 		AnimationTimer Movement = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				int dx = 0, dy = 0, jx = 0, jy = 0;
-				if (North_1){
-					dy -= 2;					//Speed of movement
+				double dx = 0, dy = 0, jx = 0, jy = 0;
+				if(PowerUp == 1) {
+					if (North_1){
+						dy -= 2.5;					//Speed of movement
+					}
+					else if (East_1){
+						dx += 2.5;
+					}
+
+					else if (South_1){
+						dy += 2.5;
+					}
+					else if (West_1){
+						dx -= 2.5;
+					}
 				}
-				else if (East_1){
-					dx += 2;
-				}
-				else if (South_1){
-					dy += 2;
-				}
-				else if (West_1){
-					dx -= 2;
+				else {
+					if (North_1){
+						dy -= 2;					
+					}
+					else if (East_1){
+						dx += 2;
+					}
+
+					else if (South_1){
+						dy += 2;
+					}
+					else if (West_1){
+						dx -= 2;
+					}
 				}
 
 
 				if (North_2){
-					jy -= 1.9;					
+					jy -= 2;					
 				}
 				else if (East_2){
-					jx += 1.6;
+					jx += 2;
 				}
 				else if (South_2){
-					jy += 1.9;
+					jy += 2;
 				}
 				else if (West_2){
-					jx -= 1.9;
+					jx -= 2;
 				}
 
 
@@ -222,7 +250,6 @@ public class multiPlayer extends Application {
 				moveToppo();
 				moveHit();
 				LifeChange();
-				//				//Timer();
 				GameWin();
 
 			}
@@ -231,7 +258,7 @@ public class multiPlayer extends Application {
 	}
 
 
-	private void moveGokuBy(int dx, int dy) {
+	private void moveGokuBy(double dx, double dy) {
 		if (dx == 0 && dy == 0) return;
 
 		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;			//Mid point
@@ -265,7 +292,7 @@ public class multiPlayer extends Application {
 		Collectibles();
 
 	}
-	private void moveJirenBy(int jx, int jy) {
+	private void moveJirenBy(double jx, double jy) {
 		if (jx == 0 && jy == 0) return;
 
 		final double Jiren_Width = Jiren.getBoundsInLocal().getWidth()  / 2;			//Mid point
@@ -408,54 +435,82 @@ public class multiPlayer extends Application {
 		final double Toppo_Height = Toppo.getBoundsInLocal().getHeight() / 2;
 		double kx = Toppo.getLayoutX() + Toppo_Width;
 		double ky = Toppo.getLayoutY() + Toppo_Height;
+		double dx = 1.5, dy = 1.5;
+		
+		
+		if(Toppo_Secondary_Count == 0) {
+			Random rand = new Random();
+			int  n = rand.nextInt(4);	//Number between 3 and 1
+			Toppo_Direction = n;
+		}
+		
+		
+		if(Toppo_Direction == 0) {
+			if(Collision_AI(kx-dx,ky)==false) {
+				Toppo.relocate(kx-Toppo_Width-dx, ky-Toppo_Height);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 1) {
+			if(Collision_AI(kx,ky+dy)==false) {
+				Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height + dy);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 2) {
+			if(Collision_AI(kx+dx,ky)==false) {
+				Toppo.relocate(kx-Toppo_Width+dx, ky-Toppo_Height);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 3) {
+			if(Collision_AI(kx,ky-dy)==false) {
+				Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-dy);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
 
 
 		//		System.out.println(Toppo_Count);
 
-		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
-			Toppo_Count = 1;
-		}
-		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
-			Toppo_Count = 2;
-		}
-		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
-			Toppo_Count = 3;
-		}
-		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
-			Toppo_Count = 0;
-		}
+//		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
+//			Toppo_Count = 1;
+//		}
+//		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
+//			Toppo_Count = 2;
+//		}
+//		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
+//			Toppo_Count = 3;
+//		}
+//		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
+//			Toppo_Count = 0;
+//		}
+//
+//		if(Toppo_Count == 0){
+//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
+//		}
+//		else if(Toppo_Count == 1){
+//			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
+//		}
+//		else if(Toppo_Count == 2){
+//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
+//		}
+//		else if(Toppo_Count == 3){
+//			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
+//		}
 
-		if(Toppo_Count == 0){
-			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
-		}
-		else if(Toppo_Count == 1){
-			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
-		}
-		else if(Toppo_Count == 2){
-			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
-		}
-		else if(Toppo_Count == 3){
-			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
-		}
-
-		//		int gx = 0;
-		//
-		//		final double Toppo_Width = Toppo.getBoundsInLocal().getWidth() / 2;
-		//		//       final double Toppo_height = Toppo.getBoundsInLocal().getHeight() / 2;
-		//
-		//		double jx = Toppo.getLayoutX() + Toppo_Width + gx;
-		//		gx = -4;
-		//
-		//		jx = Toppo.getLayoutX() + Toppo_Width + gx;
-		//
-		//		if(jx-Toppo_Width == -80) {
-		//			Toppo.relocate(W+4,300);
-		//		}
-		//		else {
-		//			Toppo.relocate(jx-Toppo_Width, 300);
-		//		}
-
-		//    	System.out.println(jx-Toppo_Width + " " + (0-Toppo_Width));
 	}
 
 
@@ -537,17 +592,17 @@ public class multiPlayer extends Application {
 				1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,3,1,0,0,0,0,0,
-				1,2,1,0,0,0,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1,0,0,0,1,2,1,0,0,0,0,0,
+				1,2,1,0,0,0,1,2,2,2,2,2,2,1,3,2,2,2,2,2,1,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,1,3,1,1,1,1,2,1,2,1,1,1,1,2,1,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,2,2,2,1,1,2,1,2,1,1,2,2,2,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,2,2,1,2,1,2,1,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
-				1,2,1,1,1,1,1,1,2,2,2,0,2,2,2,3,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
+				1,2,1,1,1,1,1,1,2,2,2,0,2,2,2,2,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,1,1,1,1,1,1,1,1,1,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,1,1,1,1,1,1,1,1,1,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,1,2,2,2,3,2,2,2,2,1,0,0,0,0,0,
-				1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
+				1,3,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,1,2,2,1,1,1,1,1,1,1,2,2,1,2,2,2,2,2,2,1,0,0,0,0,0,
@@ -679,7 +734,7 @@ public class multiPlayer extends Application {
 
 	private void Collectibles() {
 
-		PowerUp = 0;
+		int PowerUp_Total = 0;
 		for(int i=0;i<dball.size();i++) {
 			double dball_midx = dball.get(i).getLayoutX() + (dball.get(i).getBoundsInLocal().getWidth()/2);
 			double dball_midy = dball.get(i).getLayoutY() + (dball.get(i).getBoundsInLocal().getHeight()/2);
@@ -701,33 +756,50 @@ public class multiPlayer extends Application {
 				//pellet.remove(i);
 
 				map.getChildren().remove(dball.get(i));
-
-
 			}
 
 			if(map.getChildren().indexOf(dball.get(i)) == -1) {			//PowerUp based on number of Dragon
-				PowerUp++;												//Balls collected
+				PowerUp_Total++;												//Balls collected
 				//				System.out.println(PowerUp);
 			}
 
 		}
 
-		if(PowerUp%2==1 && GokuImageString == "Goku") {			//Change the image base on 
+
+		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==480) {	//If PowerUp isn't activated
+			PowerUp = 0;						
+			PowerUp_Countdown = 0;
+		}
+		else if(Collectable_Count != PowerUp_Total) { //Start or restart a 
+			PowerUp = 1;							  //count down if PowerUp activated
+			PowerUp_Countdown = 479;
+		}
+		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {			
+			PowerUp = 1;
+			PowerUp_Countdown--;
+		}
+		if(PowerUp_Countdown<=0) {			//If PowerUp time has elapsed, then reset
+			PowerUp_Countdown = 480;
+		}
+
+		Collectable_Count = PowerUp_Total;
+
+		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on 
 			double Goku_x = Goku.getLayoutX();					//number of Dballs collected
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
-			GokuImage = new Image("file:Resources/Goku_UltraInstinct.jpg",22,22,false,false);
+			GokuImage = new Image("file:Resources/Goku_UltraInstinct.png",22,22,false,false);
 			Goku = new ImageView(GokuImage);
 			map.getChildren().add(Goku);
 			Goku.relocate(Goku_x,Goku_y);
 			GokuImageString = "Goku_UltraInstinct";
 			//			System.out.println("in 1");
 		}
-		else if(PowerUp%2==0 && GokuImageString == "Goku_UltraInstinct") {
+		else if(PowerUp==0 && GokuImageString == "Goku_UltraInstinct") {
 			double Goku_x = Goku.getLayoutX();
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
-			GokuImage = new Image("file:Resources/Goku.jpg",22,22,false,false);
+			GokuImage = new Image("file:Resources/Goku.png",22,22,false,false);
 			Goku = new ImageView(GokuImage);
 			map.getChildren().add(Goku);
 			Goku.relocate(Goku_x,Goku_y);
@@ -771,7 +843,7 @@ public class multiPlayer extends Application {
 		//		Music Site: http://soundbible.com/1945-Smashing.html
 
 
-		if(PowerUp%2==0) {				//If in regular form
+		if(PowerUp==0) {				//If in regular form
 
 			if(map.getChildren().indexOf(Bean_2)==-1 && map.getChildren().indexOf(Bean_1)==-1) {
 
@@ -800,7 +872,7 @@ public class multiPlayer extends Application {
 					MediaPlayer mediaPlayer = new MediaPlayer(sound);
 					mediaPlayer.setCycleCount(1);
 					mediaPlayer.play();
-					//					Platform.exit();
+					Platform.exit();
 				}
 			}
 
@@ -833,10 +905,12 @@ public class multiPlayer extends Application {
 					map.getChildren().remove(Bean_1);
 					Goku.relocate(421,645);				//If user dies, move all characters back to
 					Kefla.relocate(640,453);			//original position
-					Jiren.relocate(260,205);
+					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
-					Toppo.relocate(805,300);
-					Toppo_Count = 0;
+					Toppo.relocate(421,295);
+					Toppo_Secondary_Count = 0;
+//					Toppo_Count = 0;
+					Hit_Count = 0;
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -846,10 +920,12 @@ public class multiPlayer extends Application {
 					map.getChildren().remove(Bean_2);
 					Goku.relocate(421,645);
 					Kefla.relocate(640,453);
-					Jiren.relocate(260,205);
+					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
-					Toppo.relocate(805,300);
-					Toppo_Count = 0;
+					Toppo.relocate(421,295);
+					Toppo_Secondary_Count = 0;
+//					Toppo_Count = 0;
+					Hit_Count = 0;
 				}
 			}
 		}
@@ -862,7 +938,7 @@ public class multiPlayer extends Application {
 					(Goku_midy + Goku_height) >= (Kefla_midy - AI_height)){
 
 				Kefla.relocate(640,453);
-				Score_Enemies+=100;							//Plus 100 point for each enemy you defeat
+				Score_Enemies+=150;							//Plus 100 point for each enemy you defeat
 			}
 
 
@@ -872,7 +948,7 @@ public class multiPlayer extends Application {
 					(Goku_midy + Goku_height) >= (Jiren_midy - AI_height)){
 
 				Jiren.relocate(200,197);
-				Score_Enemies+=100;
+				Score_Enemies+=150;
 			}
 
 			else if ((Goku_midx - Goku_width) <= (Toppo_midx + AI_width) &&
@@ -880,17 +956,19 @@ public class multiPlayer extends Application {
 					(Goku_midx + Goku_width) >= (Toppo_midx - AI_width) &&
 					(Goku_midy + Goku_height) >= (Toppo_midy - AI_height)){
 
-				if(Toppo_Count_Respawn == 0) {
-					Toppo.relocate(805,300);
-					Toppo_Count_Respawn = 1;
-					Toppo_Count = 0;
-				}
-				else {
-					Toppo.relocate(35, 300);
-					Toppo_Count_Respawn = 0;
-					Toppo_Count = 2;
-				}
-				Score_Enemies+=100;
+//				if(Toppo_Count_Respawn == 0) {
+//					Toppo.relocate(805,300);
+//					Toppo_Count_Respawn = 1;
+//					Toppo_Count = 0;
+//				}
+//				else {
+//					Toppo.relocate(35, 300);
+//					Toppo_Count_Respawn = 0;
+//					Toppo_Count = 2;
+//				}
+				Toppo.relocate(421,295);
+				Toppo_Secondary_Count = 0;
+				Score_Enemies+=150;
 			}
 
 			else if ((Goku_midx - Goku_width) <= (Hit_midx + AI_width) &&
@@ -899,7 +977,7 @@ public class multiPlayer extends Application {
 					(Goku_midy + Goku_height) >= (Hit_midy - AI_height)){
 
 				Hit.relocate(421,390);
-				Score_Enemies+=100;
+				Score_Enemies+=150;
 			}
 
 		}
@@ -917,7 +995,36 @@ public class multiPlayer extends Application {
 			System.out.println("Congrats You Won!");
 		}
 	}
+	
+	private void Clock_Timer(){
+		timeline_1 = new Timeline();
+		timeline_1.setCycleCount(Timeline.INDEFINITE);
+		timeline_1.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
 
+			public void handle(ActionEvent event) {
+				timeSeconds--;
+				min = timeSeconds/60;
+				sec = timeSeconds%60;
+				TimeValue.setText(min.toString() + ":" + sec.toString());	
+				LifeAddition();				//USed to generate life after 60 seconds
+			}
+		}));
+
+		timeline_1.playFromStart();
+	}
+
+	private void LifeAddition() {
+		if(sec == 0 && min == 1) {
+			if(map.getChildren().indexOf(Bean_1)==-1) {
+				map.getChildren().add(Bean_1);
+			}
+			else {
+				Bean_1.relocate(905,600);
+				map.getChildren().add(Bean_2);
+				Bean_2.relocate(945,600);
+			}
+		}
+	}
 
 
 	public static Scene getScene() {

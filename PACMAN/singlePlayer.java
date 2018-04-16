@@ -4,6 +4,7 @@ package PACMAN;
 import java.io.File;
 //import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 
 //import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
@@ -80,8 +81,9 @@ public class singlePlayer extends Application {
 	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;		//Used to keep track of score
 	private int PowerUp = 0;
 	private String GokuImageString;
-	private int Toppo_Count = 0, Toppo_Count_Respawn = 0;		//Count to change direction
-	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 500;
+	private int Toppo_Count = 0, Toppo_Count_Respawn = 0, Toppo_Secondary_Count = 0;//Count to change direction
+	private int Toppo_Direction = 0;
+	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 480;
 
 	Group map = new Group();
 
@@ -102,11 +104,11 @@ public class singlePlayer extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		GokuImage = new Image("file:Resources/Goku.jpg",22,22,false,false);
-		JirenImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		KeflaImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		ToppoImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
-		HitImage = new Image("file:Resources/Baby_Vegeta.jpg",22,22,false,false);
+		GokuImage = new Image("file:Resources/Goku.png",22,22,false,false);
+		JirenImage = new Image("file:Resources/Jiren.png",22,22,false,false);
+		KeflaImage = new Image("file:Resources/Kefla.png",22,22,false,false);
+		ToppoImage = new Image("file:Resources/Toppo.png",22,22,false,false);
+		HitImage = new Image("file:Resources/Hit.png",22,22,false,false);
 		BeanImage = new Image("file:Resources/Bean.jpg",30,30,true,true);
 		GokuImageString = "Goku";  						//Used to change image when collectible is collected
 
@@ -159,7 +161,7 @@ public class singlePlayer extends Application {
 		map.getChildren().add(Score_Text);
 		map.getChildren().add(Time_Text);
 		map.getChildren().add(Lives_Text);
-		map.getChildren().addAll(Bean_1,Bean_2);
+		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
 		map.getChildren().add(TimeValue);
 		map.getChildren().add(PowerUp_Cooldown_Text);
@@ -167,10 +169,10 @@ public class singlePlayer extends Application {
 
 		Jiren.relocate(200,197);
 		Kefla.relocate(640,453);
-		Toppo.relocate(805,300);
+		Toppo.relocate(421,295);
 		Hit.relocate(421,390);
-		Bean_1.relocate(905,600);
-		Bean_2.relocate(945,600);
+		Bean_1.relocate(925,600);
+//		Bean_2.relocate(945,600);
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -193,23 +195,37 @@ public class singlePlayer extends Application {
 		AnimationTimer Movement = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				int dx = 0, dy = 0;
+				double dx = 0, dy = 0;
+				if(PowerUp == 1) {
+					if (North){
+						dy -= 2.5;					//Speed of movement
+					}
+					else if (East){
+						dx += 2.5;
+					}
 
-				if (North){
-					dy -= 2;					//Speed of movement
+					else if (South){
+						dy += 2.5;
+					}
+					else if (West){
+						dx -= 2.5;
+					}
 				}
-				else if (East){
-					dx += 2;
-				}
+				else {
+					if (North){
+						dy -= 2;					
+					}
+					else if (East){
+						dx += 2;
+					}
 
-				else if (South){
-					dy += 2;
+					else if (South){
+						dy += 2;
+					}
+					else if (West){
+						dx -= 2;
+					}
 				}
-				else if (West){
-					dx -= 2;
-				}
-				//                if (running) { dx *= 3; dy *= 3; }
-
 
 
 				moveGokuBy(dx, dy);
@@ -230,7 +246,7 @@ public class singlePlayer extends Application {
 
 	}
 
-	private void moveGokuBy(int dx, int dy) {
+	private void moveGokuBy(double dx, double dy) {
 		if (dx == 0 && dy == 0) return;
 
 		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;			//Mid point
@@ -458,35 +474,80 @@ public class singlePlayer extends Application {
 		final double Toppo_Height = Toppo.getBoundsInLocal().getHeight() / 2;
 		double kx = Toppo.getLayoutX() + Toppo_Width;
 		double ky = Toppo.getLayoutY() + Toppo_Height;
+		double dx = 1.5, dy = 1.5;
 
+
+		if(Toppo_Secondary_Count == 0) {
+			Random rand = new Random();
+			int  n = rand.nextInt(4);	//Number between 3 and 1
+			Toppo_Direction = n;
+		}
+
+
+		if(Toppo_Direction == 0) {
+			if(Collision_AI(kx-dx,ky)==false) {
+				Toppo.relocate(kx-Toppo_Width-dx, ky-Toppo_Height);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 1) {
+			if(Collision_AI(kx,ky+dy)==false) {
+				Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height + dy);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 2) {
+			if(Collision_AI(kx+dx,ky)==false) {
+				Toppo.relocate(kx-Toppo_Width+dx, ky-Toppo_Height);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
+		else if(Toppo_Direction == 3) {
+			if(Collision_AI(kx,ky-dy)==false) {
+				Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-dy);
+				Toppo_Secondary_Count = 1;
+			}
+			else {
+				Toppo_Secondary_Count = 0;
+			}
+		}
 
 		//		System.out.println(Toppo_Count);
-
-		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
-			Toppo_Count = 1;
-		}
-		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
-			Toppo_Count = 2;
-		}
-		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
-			Toppo_Count = 3;
-		}
-		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
-			Toppo_Count = 0;
-		}
-
-		if(Toppo_Count == 0){
-			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
-		}
-		else if(Toppo_Count == 1){
-			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
-		}
-		else if(Toppo_Count == 2){
-			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
-		}
-		else if(Toppo_Count == 3){
-			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
-		}
+		//
+		//		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
+		//			Toppo_Count = 1;
+		//		}
+		//		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
+		//			Toppo_Count = 2;
+		//		}
+		//		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
+		//			Toppo_Count = 3;
+		//		}
+		//		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
+		//			Toppo_Count = 0;
+		//		}
+		//
+		//		if(Toppo_Count == 0){
+		//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
+		//		}
+		//		else if(Toppo_Count == 1){
+		//			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
+		//		}
+		//		else if(Toppo_Count == 2){
+		//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
+		//		}
+		//		else if(Toppo_Count == 3){
+		//			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
+		//		}
 
 		//		int gx = 0;
 		//
@@ -506,6 +567,9 @@ public class singlePlayer extends Application {
 		//		}
 
 		//    	System.out.println(jx-Toppo_Width + " " + (0-Toppo_Width));
+
+
+
 	}
 
 
@@ -587,17 +651,17 @@ public class singlePlayer extends Application {
 				1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,3,1,0,0,0,0,0,
-				1,2,1,0,0,0,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1,0,0,0,1,2,1,0,0,0,0,0,
+				1,2,1,0,0,0,1,2,2,2,2,2,2,1,3,2,2,2,2,2,1,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,1,3,1,1,1,1,2,1,2,1,1,1,1,2,1,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,2,2,2,1,1,2,1,2,1,1,2,2,2,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,2,2,1,2,1,2,1,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
-				1,2,1,1,1,1,1,1,2,2,2,0,2,2,2,3,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
+				1,2,1,1,1,1,1,1,2,2,2,0,2,2,2,2,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,1,1,1,1,1,1,1,1,1,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,0,0,0,0,1,2,1,1,1,1,1,1,1,1,1,2,1,0,0,0,0,1,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,1,2,2,2,3,2,2,2,2,1,0,0,0,0,0,
-				1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
+				1,3,1,1,1,1,1,1,2,1,0,0,0,0,0,0,0,1,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,0,0,0,0,0,
 				1,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,1,0,0,0,0,0,
 				1,2,2,2,2,2,2,1,2,2,1,1,1,1,1,1,1,2,2,1,2,2,2,2,2,2,1,0,0,0,0,0,
@@ -811,17 +875,20 @@ public class singlePlayer extends Application {
 		}
 
 
-		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==500) {
-			PowerUp = 0;
+		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==480) {	//If PowerUp isn't activated
+			PowerUp = 0;						
 			PowerUp_Countdown = 0;
 		}
-		else {
-			Collectable_Count = PowerUp_Total;
+		else if(Collectable_Count != PowerUp_Total) { //Start or restart a 
+			PowerUp = 1;							  //count down if PowerUp activated
+			PowerUp_Countdown = 479;
+		}
+		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {			
 			PowerUp = 1;
 			PowerUp_Countdown--;
 		}
-		if(PowerUp_Countdown<=0) {
-			PowerUp_Countdown = 500;
+		if(PowerUp_Countdown<=0) {			//If PowerUp time has elapsed, then reset
+			PowerUp_Countdown = 480;
 		}
 
 		Collectable_Count = PowerUp_Total;
@@ -832,7 +899,7 @@ public class singlePlayer extends Application {
 			double Goku_x = Goku.getLayoutX();					//number of Dballs collected
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
-			GokuImage = new Image("file:Resources/Goku_UltraInstinct.jpg",22,22,false,false);
+			GokuImage = new Image("file:Resources/Goku_UltraInstinct.png",22,22,false,false);
 			Goku = new ImageView(GokuImage);
 			map.getChildren().add(Goku);
 			Goku.relocate(Goku_x,Goku_y);
@@ -843,7 +910,7 @@ public class singlePlayer extends Application {
 			double Goku_x = Goku.getLayoutX();
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
-			GokuImage = new Image("file:Resources/Goku.jpg",22,22,false,false);
+			GokuImage = new Image("file:Resources/Goku.png",22,22,false,false);
 			Goku = new ImageView(GokuImage);
 			map.getChildren().add(Goku);
 			Goku.relocate(Goku_x,Goku_y);
@@ -889,9 +956,9 @@ public class singlePlayer extends Application {
 
 		if(PowerUp==0) {				//If in regular form
 
-			if(map.getChildren().indexOf(Bean_2)==-1 && map.getChildren().indexOf(Bean_1)==-1) {
+			if(map.getChildren().indexOf(Bean_2)==-1 && map.getChildren().indexOf(Bean_1)==-1) {	//No senzu beans remaining
 
-				if 		((Goku_midx - Goku_width) <= (Kefla_midx + AI_width) &&
+				if 		((Goku_midx - Goku_width) <= (Kefla_midx + AI_width) &&			//In case of collision
 						(Goku_midy - Goku_height) <= (Kefla_midy + AI_height) &&
 						(Goku_midx + Goku_width) >= (Kefla_midx - AI_width) &&
 						(Goku_midy + Goku_height) >= (Kefla_midy - AI_height)
@@ -912,11 +979,11 @@ public class singlePlayer extends Application {
 						(Goku_midy + Goku_height) >= (Hit_midy - AI_height))
 
 				{
-					Media sound = new Media(new File(musicFile).toURI().toString());
-					MediaPlayer mediaPlayer = new MediaPlayer(sound);
+					Media sound = new Media(new File(musicFile).toURI().toString());	//Used to play
+					MediaPlayer mediaPlayer = new MediaPlayer(sound);					//Collision sound
 					mediaPlayer.setCycleCount(1);
 					mediaPlayer.play();
-					//					Platform.exit();
+					Platform.exit();
 				}
 			}
 
@@ -949,10 +1016,11 @@ public class singlePlayer extends Application {
 					map.getChildren().remove(Bean_1);
 					Goku.relocate(421,645);				//If user dies, move all characters back to
 					Kefla.relocate(640,453);			//original position
-					Jiren.relocate(260,205);
+					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
-					Toppo.relocate(805,300);
-					Toppo_Count = 0;
+					Toppo.relocate(421,295);
+					//					Toppo_Count = 0;
+					Hit_Count = 0;
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -962,10 +1030,13 @@ public class singlePlayer extends Application {
 					map.getChildren().remove(Bean_2);
 					Goku.relocate(421,645);
 					Kefla.relocate(640,453);
-					Jiren.relocate(260,205);
+					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
-					Toppo.relocate(805,300);
-					Toppo_Count = 0;
+					Toppo.relocate(421,295);
+					Bean_1.relocate(925,600);
+					//					Toppo_Count = 0;
+					Toppo_Secondary_Count = 0;
+					Hit_Count = 0;
 				}
 			}
 		}
@@ -978,7 +1049,7 @@ public class singlePlayer extends Application {
 					(Goku_midy + Goku_height) >= (Kefla_midy - AI_height)){
 
 				Kefla.relocate(640,453);
-				Score_Enemies+=100;							//Plus 100 point for each enemy you defeat
+				Score_Enemies+=150;							//Plus 150 point for each enemy you defeat
 			}
 
 
@@ -988,7 +1059,7 @@ public class singlePlayer extends Application {
 					(Goku_midy + Goku_height) >= (Jiren_midy - AI_height)){
 
 				Jiren.relocate(200,197);
-				Score_Enemies+=100;
+				Score_Enemies+=150;
 			}
 
 			else if ((Goku_midx - Goku_width) <= (Toppo_midx + AI_width) &&
@@ -996,17 +1067,20 @@ public class singlePlayer extends Application {
 					(Goku_midx + Goku_width) >= (Toppo_midx - AI_width) &&
 					(Goku_midy + Goku_height) >= (Toppo_midy - AI_height)){
 
-				if(Toppo_Count_Respawn == 0) {
-					Toppo.relocate(805,300);
-					Toppo_Count_Respawn = 1;
-					Toppo_Count = 0;
-				}
-				else {
-					Toppo.relocate(35, 300);
-					Toppo_Count_Respawn = 0;
-					Toppo_Count = 2;
-				}
-				Score_Enemies+=100;
+				//				if(Toppo_Count_Respawn == 0) {
+				//				//	Toppo.relocate(805,300);
+				//					Jiren.relocate(200,197);
+				//					Toppo_Count_Respawn = 1;
+				//					Toppo_Count = 0;
+				//				}
+				//				else {
+				//					Toppo.relocate(35, 300);
+				//					Toppo_Count_Respawn = 0;
+				//					Toppo_Count = 2;
+				//				}
+				Toppo.relocate(421,295);
+				Toppo_Secondary_Count = 0;
+				Score_Enemies+=150;
 			}
 
 			else if ((Goku_midx - Goku_width) <= (Hit_midx + AI_width) &&
@@ -1015,7 +1089,7 @@ public class singlePlayer extends Application {
 					(Goku_midy + Goku_height) >= (Hit_midy - AI_height)){
 
 				Hit.relocate(421,390);
-				Score_Enemies+=100;
+				Score_Enemies+=150;
 			}
 
 		}
@@ -1045,6 +1119,7 @@ public class singlePlayer extends Application {
 				min = timeSeconds/60;
 				sec = timeSeconds%60;
 				TimeValue.setText(min.toString() + ":" + sec.toString());	
+				LifeAddition();				//USed to generate life after 60 seconds
 			}
 		}));
 
@@ -1070,8 +1145,21 @@ public class singlePlayer extends Application {
 			//		System.out.println(PowerUp_Cooldown);
 			timeline_2.playFromStart();
 		}
+		
 	}
-
+	
+	private void LifeAddition() {
+		if(sec == 0 && min == 1) {
+			if(map.getChildren().indexOf(Bean_1)==-1) {
+				map.getChildren().add(Bean_1);
+			}
+			else {
+				Bean_1.relocate(905,600);
+				map.getChildren().add(Bean_2);
+				Bean_2.relocate(945,600);
+			}
+		}
+	}
 
 	public static Scene getScene() {
 		return scene;

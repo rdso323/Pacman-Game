@@ -35,7 +35,7 @@ public class mainScreen {
 		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
 
 		multiPlayer multiPlay = new multiPlayer();
-	//	multiPlay.start(primaryStage);
+//		multiPlay.start(primaryStage);
 		buttonMultiPlayer = new Button("Multi-Player");
 		buttonMultiPlayer.setMinSize(150, 50);
 		buttonMultiPlayer.setOnAction(e -> primaryStage.setScene(multiPlayer.getScene()));
