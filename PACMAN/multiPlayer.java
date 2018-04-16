@@ -60,7 +60,7 @@ public class multiPlayer extends Application {
 	private ImageView Bean_1,Bean_2;
 	private Node  Goku, Jiren, Kefla, Toppo, Hit;
 	private Text Score_Text,Time_Text,Lives_Text,ScoreT;
-	
+
 	private static Text TimeValue;
 	private Integer min = 2;
 	private Integer sec = 0;
@@ -68,12 +68,12 @@ public class multiPlayer extends Application {
 	private Integer stime = 120;
 	private Timeline timeline_1;
 	private Integer timeSeconds = stime;
-	
+
 	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;
 	private int PowerUp = 0;
 	private String GokuImageString;
 	private int Toppo_Count = 0, Toppo_Count_Respawn = 0, Toppo_Secondary_Count = 0;		//Count to change direction
-	private int Toppo_Direction = 0;
+	private int Toppo_Direction = 0, Hit_Direction = 0;
 	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 480;
 
 	Group map = new Group();
@@ -159,7 +159,7 @@ public class multiPlayer extends Application {
 		Toppo.relocate(421,295);
 		Hit.relocate(421,390);
 		Bean_1.relocate(925,600);
-//		Bean_2.relocate(945,600);
+		//		Bean_2.relocate(945,600);
 
 
 
@@ -246,8 +246,8 @@ public class multiPlayer extends Application {
 
 				moveGokuBy(dx, dy);
 				moveJirenBy(jx,jy);
-				moveKefla();
-				moveToppo();
+	//			moveKefla();
+	//			moveToppo();
 				moveHit();
 				LifeChange();
 				GameWin();
@@ -284,7 +284,7 @@ public class multiPlayer extends Application {
 		else if(Goku.getLayoutY()+(2*Goku_Height)<=0) {
 			Goku.relocate(Goku.getLayoutX(),H-0.1);
 		}
-		else if(Collision_Goku(x,y) == false) {
+		else if(Collision_User(x,y) == false) {
 			Goku.relocate(x - Goku_Width , y - Goku_Height);
 		}
 
@@ -314,7 +314,7 @@ public class multiPlayer extends Application {
 		else if(Jiren.getLayoutY()+(2*Jiren_Height)<=0) {
 			Jiren.relocate(Jiren.getLayoutX(),H-0.1);
 		}
-		else if(Collision_AI(x,y) == false) {
+		else if(Collision_User(x,y) == false) {
 			Jiren.relocate(x - Jiren_Width , y - Jiren_Height);
 		}
 
@@ -334,7 +334,7 @@ public class multiPlayer extends Application {
 		double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 -
 				(Kefla.getLayoutY() + Kefla_Height);
 
-		if(PowerUp%2 == 0) {
+		if(PowerUp == 0) {
 			if(DistanceX > 0) {
 				px = 1.4;
 			}
@@ -436,15 +436,15 @@ public class multiPlayer extends Application {
 		double kx = Toppo.getLayoutX() + Toppo_Width;
 		double ky = Toppo.getLayoutY() + Toppo_Height;
 		double dx = 1.5, dy = 1.5;
-		
-		
+
+
 		if(Toppo_Secondary_Count == 0) {
 			Random rand = new Random();
 			int  n = rand.nextInt(4);	//Number between 3 and 1
 			Toppo_Direction = n;
 		}
-		
-		
+
+
 		if(Toppo_Direction == 0) {
 			if(Collision_AI(kx-dx,ky)==false) {
 				Toppo.relocate(kx-Toppo_Width-dx, ky-Toppo_Height);
@@ -485,31 +485,31 @@ public class multiPlayer extends Application {
 
 		//		System.out.println(Toppo_Count);
 
-//		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
-//			Toppo_Count = 1;
-//		}
-//		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
-//			Toppo_Count = 2;
-//		}
-//		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
-//			Toppo_Count = 3;
-//		}
-//		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
-//			Toppo_Count = 0;
-//		}
-//
-//		if(Toppo_Count == 0){
-//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
-//		}
-//		else if(Toppo_Count == 1){
-//			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
-//		}
-//		else if(Toppo_Count == 2){
-//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
-//		}
-//		else if(Toppo_Count == 3){
-//			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
-//		}
+		//		if(Collision_AI(kx,ky-5)==true && Collision_AI(kx+5,ky)==true) {
+		//			Toppo_Count = 1;
+		//		}
+		//		else if(Collision_AI(kx-5,ky)==true && (Collision_AI(kx,ky-5)==true)) {
+		//			Toppo_Count = 2;
+		//		}
+		//		else if(Collision_AI(kx,ky+5)==true && (Collision_AI(kx-5,ky)==true)) {
+		//			Toppo_Count = 3;
+		//		}
+		//		else if(Collision_AI(kx+5,ky)==true && (Collision_AI(kx,ky+5)==true)) {
+		//			Toppo_Count = 0;
+		//		}
+		//
+		//		if(Toppo_Count == 0){
+		//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height-2.2);
+		//		}
+		//		else if(Toppo_Count == 1){
+		//			Toppo.relocate(kx-Toppo_Width-2.2, ky-Toppo_Height);
+		//		}
+		//		else if(Toppo_Count == 2){
+		//			Toppo.relocate(kx-Toppo_Width, ky-Toppo_Height+2.2);
+		//		}
+		//		else if(Toppo_Count == 3){
+		//			Toppo.relocate(kx-Toppo_Width+2.2, ky-Toppo_Height);
+		//		}
 
 	}
 
@@ -530,7 +530,12 @@ public class multiPlayer extends Application {
 			Hit_Count ++;
 		}
 		else {
-			if(PowerUp%2==0) {
+			Random rand = new Random();
+			int  n = rand.nextInt(2);	//Number between 1 and 0
+			Hit_Direction = n;
+
+
+			if(PowerUp==0) {
 				for(int i=0;i<pellet.size();i++) {
 					double pellet_midx = pellet.get(i).getLayoutX() + (pellet.get(i).getBoundsInLocal().getWidth()/2);
 					double pellet_midy = pellet.get(i).getLayoutY() + (pellet.get(i).getBoundsInLocal().getHeight()/2);
@@ -539,49 +544,97 @@ public class multiPlayer extends Application {
 					double pellet_width = pellet.get(i).getBoundsInLocal().getWidth()/2;
 					double pellet_height = pellet.get(i).getBoundsInLocal().getHeight()/2;
 
-					if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
-						if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+					if(Hit_Direction == 0) {
+						if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
+							if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
+						else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
 
-						if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
+						else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
 
-						if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
+						else if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
 
-						if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							}
 						}
+
+
+					}
+					else if(Hit_Direction == 1) {							//Increasing randomness
+						if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
+
+							if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							}
+						}
+						else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
+
+							if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							}
+						}
+
+						else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
+
+							if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							}
+						}
+						else if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
+							if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+							}
+						}
+
+
 					}
 				}
 			}
 			else {
-				Hit.relocate(421,390);;
+				Hit.relocate(421,390);		//Relocate back to centre if powerup is on
 			}
 			Hit_Count = 0;
 		}
@@ -648,24 +701,24 @@ public class multiPlayer extends Application {
 	}	
 
 
-	private boolean Collision_Goku (double x , double y) {
+	private boolean Collision_User (double x , double y) {
 
 		for(int i=0;i<wall.size();i++) {
 			double rectangle_midx = wall.get(i).getX() + (wall.get(i).getBoundsInLocal().getWidth()/2);
 			double rectangle_midy = wall.get(i).getY() + (wall.get(i).getBoundsInLocal().getHeight()/2);
 			//			System.out.println(rectangle_midx);
 			//			System.out.println(rectangle_midy);
-			double Goku_midx = x;
-			double Goku_midy = y;
+			double User_midx = x;
+			double User_midy = y;
 			double rectangle_width = 16;
 			double rectangle_height = 16;
-			double Goku_width = Goku.getBoundsInLocal().getWidth()/2;
-			double Goku_height = Goku.getBoundsInLocal().getHeight()/2;
+			double User_width = Goku.getBoundsInLocal().getWidth()/2;
+			double User_height = Goku.getBoundsInLocal().getHeight()/2;
 
-			if 		((Goku_midx - Goku_width) <= (rectangle_midx + rectangle_width) &&
-					(Goku_midy - Goku_height) <= (rectangle_midy + rectangle_height) &&
-					(Goku_midx + Goku_width) >= (rectangle_midx - rectangle_width) &&
-					(Goku_midy + Goku_height) >= (rectangle_midy - rectangle_height))
+			if 		((User_midx - User_width) <= (rectangle_midx + rectangle_width-2) &&
+					(User_midy - User_height) <= (rectangle_midy + rectangle_height-2) &&
+					(User_midx + User_width) >= (rectangle_midx - rectangle_width+2) &&
+					(User_midy + User_height) >= (rectangle_midy - rectangle_height+2))
 			{
 				return true;
 			}
@@ -909,8 +962,10 @@ public class multiPlayer extends Application {
 					Hit.relocate(421,390);
 					Toppo.relocate(421,295);
 					Toppo_Secondary_Count = 0;
-//					Toppo_Count = 0;
 					Hit_Count = 0;
+					North_1 = false;South_1 = false;East_1 = false;West_1 = false;	//Set direction of user & AI
+					North_2 = false;South_2 = false;East_2 = false;West_2 = false;	//to 0
+					
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -924,8 +979,9 @@ public class multiPlayer extends Application {
 					Hit.relocate(421,390);
 					Toppo.relocate(421,295);
 					Toppo_Secondary_Count = 0;
-//					Toppo_Count = 0;
 					Hit_Count = 0;
+					North_1 = false;South_1 = false;East_1 = false;West_1 = false;	
+					North_2 = false;South_2 = false;East_2 = false;West_2 = false;
 				}
 			}
 		}
@@ -948,6 +1004,7 @@ public class multiPlayer extends Application {
 					(Goku_midy + Goku_height) >= (Jiren_midy - AI_height)){
 
 				Jiren.relocate(200,197);
+				North_2 = false;South_2 = false;East_2 = false;West_2 = false;
 				Score_Enemies+=150;
 			}
 
@@ -956,16 +1013,16 @@ public class multiPlayer extends Application {
 					(Goku_midx + Goku_width) >= (Toppo_midx - AI_width) &&
 					(Goku_midy + Goku_height) >= (Toppo_midy - AI_height)){
 
-//				if(Toppo_Count_Respawn == 0) {
-//					Toppo.relocate(805,300);
-//					Toppo_Count_Respawn = 1;
-//					Toppo_Count = 0;
-//				}
-//				else {
-//					Toppo.relocate(35, 300);
-//					Toppo_Count_Respawn = 0;
-//					Toppo_Count = 2;
-//				}
+				//				if(Toppo_Count_Respawn == 0) {
+				//					Toppo.relocate(805,300);
+				//					Toppo_Count_Respawn = 1;
+				//					Toppo_Count = 0;
+				//				}
+				//				else {
+				//					Toppo.relocate(35, 300);
+				//					Toppo_Count_Respawn = 0;
+				//					Toppo_Count = 2;
+				//				}
 				Toppo.relocate(421,295);
 				Toppo_Secondary_Count = 0;
 				Score_Enemies+=150;
@@ -995,7 +1052,7 @@ public class multiPlayer extends Application {
 			System.out.println("Congrats You Won!");
 		}
 	}
-	
+
 	private void Clock_Timer(){
 		timeline_1 = new Timeline();
 		timeline_1.setCycleCount(Timeline.INDEFINITE);

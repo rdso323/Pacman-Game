@@ -82,7 +82,7 @@ public class singlePlayer extends Application {
 	private int PowerUp = 0;
 	private String GokuImageString;
 	private int Toppo_Count = 0, Toppo_Count_Respawn = 0, Toppo_Secondary_Count = 0;//Count to change direction
-	private int Toppo_Direction = 0;
+	private int Toppo_Direction = 0, Hit_Direction = 0;
 	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 480;
 
 	Group map = new Group();
@@ -229,9 +229,9 @@ public class singlePlayer extends Application {
 
 
 				moveGokuBy(dx, dy);
-				moveJiren();
-				moveKefla();
-				moveToppo();
+	//			moveJiren();
+	//			moveKefla();
+	//			moveToppo();
 				moveHit();
 				LifeChange();
 				//Timer();
@@ -298,7 +298,7 @@ public class singlePlayer extends Application {
 				(Jiren.getLayoutY() + Jiren_Height);
 
 
-		if(PowerUp%2 == 0) {
+		if(PowerUp == 0) {
 			if(DistanceX > 0) {
 				px = 1.6;
 			}
@@ -373,7 +373,7 @@ public class singlePlayer extends Application {
 		double DistanceY = Goku.getLayoutY() + Goku.getBoundsInLocal().getHeight() / 2 -
 				(Kefla.getLayoutY() + Kefla_Height);
 
-		if(PowerUp%2 == 0) {
+		if(PowerUp == 0) {
 			if(DistanceX > 0) {
 				px = 1.4;
 			}
@@ -479,7 +479,7 @@ public class singlePlayer extends Application {
 
 		if(Toppo_Secondary_Count == 0) {
 			Random rand = new Random();
-			int  n = rand.nextInt(4);	//Number between 3 and 1
+			int  n = rand.nextInt(4);	//Number between 3 and 0
 			Toppo_Direction = n;
 		}
 
@@ -589,7 +589,12 @@ public class singlePlayer extends Application {
 			Hit_Count ++;
 		}
 		else {
-			if(PowerUp%2==0) {
+			Random rand = new Random();
+			int  n = rand.nextInt(2);	//Number between 1 and 0
+			Hit_Direction = n;
+
+
+			if(PowerUp==0) {
 				for(int i=0;i<pellet.size();i++) {
 					double pellet_midx = pellet.get(i).getLayoutX() + (pellet.get(i).getBoundsInLocal().getWidth()/2);
 					double pellet_midy = pellet.get(i).getLayoutY() + (pellet.get(i).getBoundsInLocal().getHeight()/2);
@@ -598,54 +603,101 @@ public class singlePlayer extends Application {
 					double pellet_width = pellet.get(i).getBoundsInLocal().getWidth()/2;
 					double pellet_height = pellet.get(i).getBoundsInLocal().getHeight()/2;
 
-					if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
-						if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+					if(Hit_Direction == 0) {
+						if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
+							if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
+						else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
 
-						if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
+						else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
 
-						if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							}
 						}
-					}
-					else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
+						else if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
 
-						if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
-								(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
-								(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
-								(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
-						{
-							Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							}
 						}
+
+
+					}
+					else if(Hit_Direction == 1) {							//Increasing randomness
+						if(Collision_AI(Goku_midx-120,Goku_midy) == false) {
+
+							if 		((Goku_midx - 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx - 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy  + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width-120,Goku_midy-Goku_Height);
+							}
+						}
+						else if(Collision_AI(Goku_midx,Goku_midy-120) == false) {
+
+							if 		((Goku_midx  - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - 120- Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy - 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height-120);
+							}
+						}
+
+						else if(Collision_AI(Goku_midx,Goku_midy+120) == false) {
+
+							if 		((Goku_midx - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy + 120 - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx  + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + 120 + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width,Goku_midy-Goku_Height+120);
+							}
+						}
+						else if(Collision_AI(Goku_midx+120,Goku_midy) == false) {
+							if 		((Goku_midx + 120 - Goku_Width) <= (pellet_midx + pellet_width) &&
+									(Goku_midy - Goku_Height) <= (pellet_midy + pellet_height) &&
+									(Goku_midx + 120 + Goku_Width) >= (pellet_midx - pellet_width) &&
+									(Goku_midy + Goku_Height) >= (pellet_midy - pellet_height))
+							{
+								Hit.relocate(Goku_midx-Goku_Width+120,Goku_midy-Goku_Height);
+							}
+						}
+
+
 					}
 				}
 			}
 			else {
-				Hit.relocate(421,390);;
+				Hit.relocate(421,390);		//Relocate back to centre if powerup is on
 			}
 			Hit_Count = 0;
 		}
 	}
-
 	private void Maze() {// throws FileNotFoundException{
 		int[] Array = {
 				1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
@@ -742,10 +794,10 @@ public class singlePlayer extends Application {
 			double Goku_width = Goku.getBoundsInLocal().getWidth()/2;
 			double Goku_height = Goku.getBoundsInLocal().getHeight()/2;
 
-			if 		((Goku_midx - Goku_width) <= (rectangle_midx + rectangle_width) &&
-					(Goku_midy - Goku_height) <= (rectangle_midy + rectangle_height) &&
-					(Goku_midx + Goku_width) >= (rectangle_midx - rectangle_width) &&
-					(Goku_midy + Goku_height) >= (rectangle_midy - rectangle_height))
+			if 		((Goku_midx - Goku_width) <= (rectangle_midx + rectangle_width-2) &&
+					(Goku_midy - Goku_height) <= (rectangle_midy + rectangle_height-2) &&
+					(Goku_midx + Goku_width) >= (rectangle_midx - rectangle_width+2) &&
+					(Goku_midy + Goku_height) >= (rectangle_midy - rectangle_height+2))
 			{
 				return true;
 			}
@@ -1019,8 +1071,12 @@ public class singlePlayer extends Application {
 					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
 					Toppo.relocate(421,295);
-					//					Toppo_Count = 0;
+					Toppo_Secondary_Count = 0;
 					Hit_Count = 0;
+					North = false;South = false;East = false;West = false;		//Set direction of user to 0
+					
+					
+					
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -1034,9 +1090,9 @@ public class singlePlayer extends Application {
 					Hit.relocate(421,390);
 					Toppo.relocate(421,295);
 					Bean_1.relocate(925,600);
-					//					Toppo_Count = 0;
 					Toppo_Secondary_Count = 0;
 					Hit_Count = 0;
+					North = false;South = false;East = false;West = false;			
 				}
 			}
 		}
