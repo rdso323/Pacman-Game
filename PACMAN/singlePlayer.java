@@ -71,7 +71,7 @@ public class singlePlayer extends Application {
 	private static Text TimeValue;
 
 
-	private Text ScoreT;
+	private static Text ScoreT;
 	private Timeline TimerLiner;
 	private int Score = 0;
 	private static Integer min = 2;
@@ -793,6 +793,7 @@ public class singlePlayer extends Application {
 				//Platform.exit();
 				//mainS.menu();
 				gamePause();
+				HighScoreScreen.setScore();
 				gamOvr gO = new gamOvr();
 				gO.gmeOvr(stage);
 
@@ -857,6 +858,7 @@ public class singlePlayer extends Application {
 				//map.getChildren().add(TimeValue);
 				if(timeSeconds <= 0){
 					gamePause();
+					HighScoreScreen.setScore();
 					gamOvr gO = new gamOvr();
 					gO.gmeOvr(primaryStage);
 					timeline.stop();
@@ -887,5 +889,10 @@ public class singlePlayer extends Application {
 
 	public static Scene getScene() {
 		return scene;
+	}
+
+	public static String getScore(){
+		String finalScore = ScoreT.getText();
+		return finalScore;
 	}
 }

@@ -23,6 +23,7 @@ import javafx.scene.layout.BackgroundImage;
 public class singlePlayerStart {
 
 	static Scene singleSScene;
+	static String namePlayer;
 
 	public void sinStart(Stage primaryStage) throws Exception{
 
@@ -30,7 +31,7 @@ public class singlePlayerStart {
 		countdown cd = new countdown();
 		singlePlayer sinPlay = new singlePlayer();
 		sinPlay.start(primaryStage);
-		sinPlay.gamePause();
+		singlePlayer.gamePause();
 
 		Label label1 = new Label("Enter your Name:");
 		label1.setFont(Font.font("ARIAL", 20));
@@ -52,6 +53,7 @@ public class singlePlayerStart {
 				@Override
 				public void handle(ActionEvent arg0) {
 					if(!(name.getText().isEmpty())){
+						namePlayer = name.getText();
 						primaryStage.setScene(singlePlayer.getScene());
 						cd.setCD(primaryStage);
 					}else{
@@ -75,6 +77,10 @@ public class singlePlayerStart {
 
 	public static Scene getScene(){
 		return singleSScene;
+	}
+
+	public static String getName(){
+		return namePlayer;
 	}
 
 }

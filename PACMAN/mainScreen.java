@@ -66,7 +66,7 @@ public class mainScreen {
 		hiScore.highScore(primaryStage);
 		buttonHighScore = new Button("High Score");
 		buttonHighScore.setMinSize(150, 50);
-		//buttonHighScore.setOnAction(e -> primaryStage.setScene(HighScoreScreen.getScene()));
+		buttonHighScore.setOnAction(e -> primaryStage.setScene(HighScoreScreen.getScene()));
 
 
 		VBox homeLayout1 = new VBox(20);
