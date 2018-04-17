@@ -179,13 +179,13 @@ public class HighScoreScreen {
 		try {
 			readFile = new FileReader("highScore.txt");
 			reader = new BufferedReader(readFile);
-			String line = "no one:0";
+			String line = "NA:0";
 			for(int i = 1; i < 6; i++){
 
 				try {
 					line = reader.readLine();
 				} catch (IOException e) {
-					line = "no one:0";
+					line = "NA:0";
 				}
 
 				String splitted[] = line.split(":");

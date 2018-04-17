@@ -101,6 +101,13 @@ public class singlePlayer extends Application {
 	private static Integer sec = 0;
 	public Integer minutesR,secondsR;
 	private static final Integer stime = 120;
+
+	private final Integer lifetimer = 120;
+	private Integer Seconds = lifetimer;
+	private Timeline lifetimeline;
+
+
+	private static final String effectively = null;
 	private static Timeline timeline;
 	private static Integer timeSeconds = stime;
 
@@ -169,6 +176,7 @@ public class singlePlayer extends Application {
 		TimeValue.setFont(Font.font("ARIAL", 30));
 		TimeValue.setFill(Color.WHITE);
 		lvlTime(stage);
+		lifeTime();
 		//System.out.println(minutesR/60 + ":" + secondsR%60);
 
 //		PowerUp_Cooldown_Text = new Text(400,80,"Time to Cooldown:");
@@ -189,7 +197,7 @@ public class singlePlayer extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				gamePause();
-				PauseMenu.pause(stage);
+				PauseMenu.pauseSin(stage);
 			}
 
 		});
@@ -198,11 +206,11 @@ public class singlePlayer extends Application {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == (KeyCode.P)){
 					gamePause();
-					PauseMenu.pause(stage);
+					PauseMenu.pauseSin(stage);
 					//timeline.pause();
 				}else if(event.getCode() == (KeyCode.ESCAPE)){
 					gamePause();
-					PauseMenu.pause(stage);
+					PauseMenu.pauseSin(stage);
 					//timeline.pause();
 
 				}else if (event.getCode() == (KeyCode.PAGE_DOWN)){
@@ -281,7 +289,7 @@ public class singlePlayer extends Application {
 				}
 				else {
 					if (North){
-						dy -= 2;					
+						dy -= 2;
 					}
 					else if (East){
 						dx += 2;
@@ -305,7 +313,7 @@ public class singlePlayer extends Application {
 				moveHit();
 				LifeChange(stage);
 				//Timer();
-				GameWin();
+				GameWin(stage);
 			}
 		};
 		Movement.start();
@@ -535,7 +543,7 @@ public class singlePlayer extends Application {
 	}
 
 
-	private void moveToppo() {			//Circles the track 
+	private void moveToppo() {			//Circles the track
 
 		final double Toppo_Width = Toppo.getBoundsInLocal().getWidth() / 2;
 		final double Toppo_Height = Toppo.getBoundsInLocal().getHeight() / 2;
@@ -646,7 +654,7 @@ public class singlePlayer extends Application {
 		final double Hit_Height = Hit.getBoundsInLocal().getHeight() / 2;
 		double Hit_midx = Hit.getLayoutX() + Hit_Width;
 		double Hit_midy = Hit.getLayoutY() + Hit_Height;
-		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;			
+		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;
 		final double Goku_Height = Goku.getBoundsInLocal().getHeight() / 2;
 		double Goku_midx = Goku_Width + Goku.getLayoutX();
 		double Goku_midy = Goku_Height+ Goku.getLayoutY();
@@ -994,14 +1002,14 @@ public class singlePlayer extends Application {
 		}
 
 		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==480) {	//If PowerUp isn't activated
-			PowerUp = 0;						
+			PowerUp = 0;
 			PowerUp_Countdown = 0;
 		}
-		else if(Collectable_Count != PowerUp_Total) { //Start or restart a 
+		else if(Collectable_Count != PowerUp_Total) { //Start or restart a
 			PowerUp = 1;							  //count down if PowerUp activated
 			PowerUp_Countdown = 479;
 		}
-		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {			
+		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {
 			PowerUp = 1;
 			PowerUp_Countdown--;
 		}
@@ -1013,7 +1021,7 @@ public class singlePlayer extends Application {
 
 		//		System.out.println(PowerUp_Countdown);
 
-		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on 
+		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on
 			double Goku_x = Goku.getLayoutX();					//number of Dballs collected
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
@@ -1144,9 +1152,9 @@ public class singlePlayer extends Application {
 					Toppo_Secondary_Count = 0;
 					Hit_Count = 0;
 					North = false;South = false;East = false;West = false;		//Set direction of user to 0
-					
-					
-					
+
+
+
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -1162,7 +1170,7 @@ public class singlePlayer extends Application {
 					Bean_1.relocate(925,600);
 					Toppo_Secondary_Count = 0;
 					Hit_Count = 0;
-					North = false;South = false;East = false;West = false;			
+					North = false;South = false;East = false;West = false;
 				}
 			}
 		}
@@ -1221,7 +1229,7 @@ public class singlePlayer extends Application {
 		}
 	}
 
-	private void GameWin() {
+	private void GameWin(Stage primaryStage) {
 		int pellet_count = 0;
 		for(int i=0;i<pellet.size();i++) {
 			if(map.getChildren().indexOf(pellet.get(i))==-1) {
@@ -1229,8 +1237,12 @@ public class singlePlayer extends Application {
 			}
 		}
 		if(pellet_count == pellet.size()) {
-			Platform.exit();
-			System.out.println("Congrats You Won!");
+//			Platform.exit();
+//			System.out.println("Congrats You Won!");
+			gamePause();
+			HighScoreScreen.setScore();
+			uWon won = new uWon();
+			won.win(primaryStage);
 		}
 	}
 	public static void lvlTime(Stage primaryStage){
@@ -1287,6 +1299,7 @@ public class singlePlayer extends Application {
 
 	public static void resettimer(){
 		timeSeconds = stime;
+
 	}
 
 	public static void gamePause(){
@@ -1321,11 +1334,26 @@ public class singlePlayer extends Application {
 //			//		System.out.println(PowerUp_Cooldown);
 //			timeline_2.playFromStart();
 //		}
-//		
+//
 //	}
-	
-	private void LifeAddition() {
-		if(sec == 0 && min == 1) {
+
+	public void lifeTime(){
+		lifetimeline = new Timeline();
+		lifetimeline.setCycleCount(Timeline.INDEFINITE);
+		lifetimeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				Seconds--;
+				LifeAddition(Seconds);
+				if(Seconds <= 0){
+					lifetimeline.stop();
+				}
+			}
+		}));
+		lifetimeline.playFromStart();
+	}
+
+	private void LifeAddition(int seconds) {
+		if(seconds == 30) {
 			if(map.getChildren().indexOf(Bean_1)==-1) {
 				map.getChildren().add(Bean_1);
 			}

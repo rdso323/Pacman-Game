@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -54,6 +55,7 @@ public class multiPlayer extends Application {
 	//private static final String SENZU_BEAN_LOC =
 	//"http://shiftingpixel.com/slir/w900/wp-content/uploads/2008/02/coffee-bean.jpg;
 
+	static AnimationTimer MovementM;
 
 	static Scene scene;
 	private Image GokuImage, JirenImage, KeflaImage, ToppoImage, HitImage, BeanImage;
@@ -65,9 +67,9 @@ public class multiPlayer extends Application {
 	private Integer min = 2;
 	private Integer sec = 0;
 	public Integer minutesR,secondsR;
-	private Integer stime = 120;
-	private Timeline timeline_1;
-	private Integer timeSeconds = stime;
+	private static Integer stime = 120;
+	private static Timeline timelineM;
+	private static Integer timeSecondsM = stime;
 
 	private int Score_Pellets = 0, Score_Enemies = 0, Score_Total = 0;
 	private int PowerUp = 0;
@@ -95,7 +97,7 @@ public class multiPlayer extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 		GokuImage = new Image("file:Resources/Goku.png",22,22,false,false);
 		JirenImage = new Image("file:Resources/Jiren.png",22,22,false,false);
 		KeflaImage = new Image("file:Resources/Kefla.png",22,22,false,false);
@@ -135,10 +137,42 @@ public class multiPlayer extends Application {
 		Lives_Text.setFill(Color.WHITE);
 		Lives_Text.setUnderline(true);
 
+		Button buttonPause = new Button("Pause");
+		buttonPause.setMinSize(100, 50);
+		buttonPause.setTranslateX(900);
+		buttonPause.setTranslateY(25);
+		buttonPause.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				gamePause();
+				PauseMenu.pauseMul(primaryStage);
+			}
+
+		});
+		buttonPause.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == (KeyCode.P)){
+					gamePause();
+					PauseMenu.pauseMul(primaryStage);
+					//timeline.pause();
+				}else if(event.getCode() == (KeyCode.ESCAPE)){
+					gamePause();
+					PauseMenu.pauseMul(primaryStage);
+					//timeline.pause();
+
+				}else if (event.getCode() == (KeyCode.PAGE_DOWN)){
+					//gamePause();
+					timeSecondsM = 1;
+					//timeline.pause();
+				}
+			}
+		});
+
 
 		scene = new Scene(map, W, H, Color.BLACK);
 		Maze();
-		Clock_Timer();
+		Clock_Timer(primaryStage);
 		//		moveGokuTo(W / 2, H / 2);			//Starting position
 
 		map.getChildren().add(Jiren);
@@ -152,6 +186,7 @@ public class multiPlayer extends Application {
 		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
 		map.getChildren().add(TimeValue1);
+		map.getChildren().add(buttonPause);
 
 
 		Jiren.relocate(200,197);
@@ -194,7 +229,7 @@ public class multiPlayer extends Application {
 			}
 		});
 
-		AnimationTimer Movement = new AnimationTimer() {
+		MovementM = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				double dx = 0, dy = 0, jx = 0, jy = 0;
@@ -215,7 +250,7 @@ public class multiPlayer extends Application {
 				}
 				else {
 					if (North_1){
-						dy -= 2;					
+						dy -= 2;
 					}
 					else if (East_1){
 						dx += 2;
@@ -231,7 +266,7 @@ public class multiPlayer extends Application {
 
 
 				if (North_2){
-					jy -= 2;					
+					jy -= 2;
 				}
 				else if (East_2){
 					jx += 2;
@@ -249,12 +284,12 @@ public class multiPlayer extends Application {
 				moveKefla();
 				moveToppo();
 				moveHit();
-				LifeChange();
-				GameWin();
+				LifeChange(primaryStage);
+				GameWin(primaryStage);
 
 			}
 		};
-		Movement.start();
+		MovementM.start();
 	}
 
 
@@ -429,7 +464,7 @@ public class multiPlayer extends Application {
 	}
 
 
-	private void moveToppo() {			//Circles the track 
+	private void moveToppo() {			//Circles the track
 
 		final double Toppo_Width = Toppo.getBoundsInLocal().getWidth() / 2;
 		final double Toppo_Height = Toppo.getBoundsInLocal().getHeight() / 2;
@@ -520,7 +555,7 @@ public class multiPlayer extends Application {
 		final double Hit_Height = Hit.getBoundsInLocal().getHeight() / 2;
 		double Hit_midx = Hit.getLayoutX() + Hit_Width;
 		double Hit_midy = Hit.getLayoutY() + Hit_Height;
-		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;			
+		final double Goku_Width = Goku.getBoundsInLocal().getWidth()  / 2;
 		final double Goku_Height = Goku.getBoundsInLocal().getHeight() / 2;
 		double Goku_midx = Goku_Width + Goku.getLayoutX();
 		double Goku_midy = Goku_Height+ Goku.getLayoutY();
@@ -698,7 +733,7 @@ public class multiPlayer extends Application {
 				Goku.relocate((32*(i%32))+5,(32*j)+5);			//Starting position ((32-22)/2=5)
 			}
 		}
-	}	
+	}
 
 
 	private boolean Collision_User (double x , double y) {
@@ -820,14 +855,14 @@ public class multiPlayer extends Application {
 
 
 		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==480) {	//If PowerUp isn't activated
-			PowerUp = 0;						
+			PowerUp = 0;
 			PowerUp_Countdown = 0;
 		}
-		else if(Collectable_Count != PowerUp_Total) { //Start or restart a 
+		else if(Collectable_Count != PowerUp_Total) { //Start or restart a
 			PowerUp = 1;							  //count down if PowerUp activated
 			PowerUp_Countdown = 479;
 		}
-		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {			
+		else if(Collectable_Count == PowerUp_Total && PowerUp_Countdown!=480) {
 			PowerUp = 1;
 			PowerUp_Countdown--;
 		}
@@ -837,7 +872,7 @@ public class multiPlayer extends Application {
 
 		Collectable_Count = PowerUp_Total;
 
-		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on 
+		if(PowerUp==1 && GokuImageString == "Goku") {			//Change the image base on
 			double Goku_x = Goku.getLayoutX();					//number of Dballs collected
 			double Goku_y = Goku.getLayoutY();
 			map.getChildren().remove(Goku);
@@ -876,7 +911,7 @@ public class multiPlayer extends Application {
 
 
 
-	private void LifeChange() {
+	private void LifeChange(Stage stage) {
 		double Kefla_midx = Kefla.getLayoutX() + Kefla.getBoundsInLocal().getWidth();
 		double Kefla_midy = Kefla.getLayoutY() + Kefla.getBoundsInLocal().getHeight();
 		double Jiren_midx = Jiren.getLayoutX() + Jiren.getBoundsInLocal().getWidth();
@@ -926,6 +961,9 @@ public class multiPlayer extends Application {
 					mediaPlayer.setCycleCount(1);
 					mediaPlayer.play();
 		//			Platform.exit();
+					gamePause();
+					gamOvr gO = new gamOvr();
+					gO.gmeOvr(stage);
 				}
 			}
 
@@ -965,7 +1003,7 @@ public class multiPlayer extends Application {
 					Hit_Count = 0;
 					North_1 = false;South_1 = false;East_1 = false;West_1 = false;	//Set direction of user & AI
 					North_2 = false;South_2 = false;East_2 = false;West_2 = false;	//to 0
-					
+
 				}
 				else {
 					Media sound = new Media(new File(musicFile).toURI().toString());
@@ -978,9 +1016,10 @@ public class multiPlayer extends Application {
 					Jiren.relocate(200,197);
 					Hit.relocate(421,390);
 					Toppo.relocate(421,295);
+					Bean_1.relocate(925,600);
 					Toppo_Secondary_Count = 0;
 					Hit_Count = 0;
-					North_1 = false;South_1 = false;East_1 = false;West_1 = false;	
+					North_1 = false;South_1 = false;East_1 = false;West_1 = false;
 					North_2 = false;South_2 = false;East_2 = false;West_2 = false;
 				}
 			}
@@ -1040,7 +1079,7 @@ public class multiPlayer extends Application {
 		}
 	}
 
-	private void GameWin() {
+	private void GameWin(Stage stage) {
 		int pellet_count = 0;
 		for(int i=0;i<pellet.size();i++) {
 			if(map.getChildren().indexOf(pellet.get(i))==-1) {
@@ -1048,26 +1087,37 @@ public class multiPlayer extends Application {
 			}
 		}
 		if(pellet_count == pellet.size()) {
-			Platform.exit();
-			System.out.println("Congrats You Won!");
+			gamePause();
+			gamOvr gO = new gamOvr();
+			gO.gmeOvr(stage);
 		}
 	}
 
-	private void Clock_Timer(){
-		timeline_1 = new Timeline();
-		timeline_1.setCycleCount(Timeline.INDEFINITE);
-		timeline_1.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+	private void Clock_Timer(Stage stage){
+		timelineM = new Timeline();
+		timelineM.setCycleCount(Timeline.INDEFINITE);
+		timelineM.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
 
 			public void handle(ActionEvent event) {
-				timeSeconds--;
-				min = timeSeconds/60;
-				sec = timeSeconds%60;
-				TimeValue1.setText(min.toString() + ":" + sec.toString());	
+				timeSecondsM--;
+				min = timeSecondsM/60;
+				sec = timeSecondsM%60;
+				if(sec < 10){
+					TimeValue1.setText(min.toString() + ":0" + sec.toString());
+				}else{
+					TimeValue1.setText(min.toString() + ":" + sec.toString());
+				}
 				LifeAddition();				//USed to generate life after 60 seconds
+				if(timeSecondsM <= 0){
+					gamePause();
+					gamOvr gO = new gamOvr();
+					gO.gmeOvr(stage);
+					timelineM.stop();
+				}
 			}
 		}));
 
-		timeline_1.playFromStart();
+		timelineM.playFromStart();
 	}
 
 	private void LifeAddition() {
@@ -1086,6 +1136,22 @@ public class multiPlayer extends Application {
 
 	public static Scene getScene() {
 		return scene;
+	}
+
+	public static void resettimer(){
+		timeSecondsM = stime;
+	}
+//
+	public static void gamePause(){
+//		//Animation.Status.PAUSED;
+		MovementM.stop();
+		timelineM.pause();
+	}
+//
+	public static void gameResume(){
+////		Animation.Status.RUNNING;
+		MovementM.start();
+		timelineM.play();
 	}
 
 }

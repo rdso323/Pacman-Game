@@ -23,26 +23,25 @@ public class MultiPlayerScreen {
 
 	public void mPlay(Stage primaryStage) throws Exception{
 
-//		countdown cd = new countdown();
-		//singlePlayer sinPlay = new singlePlayer();
-		//sinPlay.start(primaryStage);
-		//sinPlay.gamePause();
-		
+		countdown cd = new countdown();
 		multiPlayer multiP = new multiPlayer();
 		multiP.start(primaryStage);
+		multiPlayer.gamePause();
+
 		Button buttonStart = new Button("Start");
 		buttonStart.setMinSize(150, 50);
-		buttonStart.setTranslateX(250);
-		buttonStart.setOnAction(e -> primaryStage.setScene(multiPlayer.getScene()));
-//		buttonStart.setOnAction(new EventHandler<ActionEvent>(){
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				primaryStage.setScene(singlePlayer.getScene());
-//				cd.setCD(primaryStage);
-//
-//			}
+		buttonStart.setTranslateX(20);
+		buttonStart.setTranslateY(-50);
+		//buttonStart.setOnAction(e -> primaryStage.setScene(multiPlayer.getScene()));
+		buttonStart.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				primaryStage.setScene(multiPlayer.getScene());
+				cd.setCDMul(primaryStage);
 
-//		});
+			}
+
+		});
 
 
 
