@@ -229,9 +229,9 @@ public class singlePlayer extends Application {
 
 
 				moveGokuBy(dx, dy);
-	//			moveJiren();
-	//			moveKefla();
-	//			moveToppo();
+				moveJiren();
+				moveKefla();
+				moveToppo();
 				moveHit();
 				LifeChange();
 				//Timer();
@@ -242,7 +242,7 @@ public class singlePlayer extends Application {
 		Movement.start();
 		//		lvlTime(stage);
 		Clock_Timer();
-		Clock_Collectable();
+//		Clock_Collectable();
 
 	}
 
@@ -1182,27 +1182,27 @@ public class singlePlayer extends Application {
 		timeline_1.playFromStart();
 	}
 
-	private void Clock_Collectable() {
-
-		if(PowerUp == 0) {
-			PowerUp_Cooldown = 8;
-		}
-		else {
-			timeline_2 = new Timeline();
-			timeline_2.setCycleCount(Timeline.INDEFINITE);
-			timeline_2.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
-				public void handle(ActionEvent event) {
-					PowerUp_Cooldown_Text.setText("Time to Cooldown:" + PowerUp_Cooldown.toString());
-					PowerUp_Cooldown--;
-					System.out.println(PowerUp_Cooldown);
-				}
-			}));
-
-			//		System.out.println(PowerUp_Cooldown);
-			timeline_2.playFromStart();
-		}
-		
-	}
+//	private void Clock_Collectable() {
+//
+//		if(PowerUp == 0) {
+//			PowerUp_Cooldown = 8;
+//		}
+//		else {
+//			timeline_2 = new Timeline();
+//			timeline_2.setCycleCount(Timeline.INDEFINITE);
+//			timeline_2.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+//				public void handle(ActionEvent event) {
+//					PowerUp_Cooldown_Text.setText("Time to Cooldown:" + PowerUp_Cooldown.toString());
+//					PowerUp_Cooldown--;
+//					System.out.println(PowerUp_Cooldown);
+//				}
+//			}));
+//
+//			//		System.out.println(PowerUp_Cooldown);
+//			timeline_2.playFromStart();
+//		}
+//		
+//	}
 	
 	private void LifeAddition() {
 		if(sec == 0 && min == 1) {

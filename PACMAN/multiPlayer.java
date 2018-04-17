@@ -246,8 +246,8 @@ public class multiPlayer extends Application {
 
 				moveGokuBy(dx, dy);
 				moveJirenBy(jx,jy);
-	//			moveKefla();
-	//			moveToppo();
+				moveKefla();
+				moveToppo();
 				moveHit();
 				LifeChange();
 				GameWin();
@@ -925,7 +925,7 @@ public class multiPlayer extends Application {
 					MediaPlayer mediaPlayer = new MediaPlayer(sound);
 					mediaPlayer.setCycleCount(1);
 					mediaPlayer.play();
-					Platform.exit();
+		//			Platform.exit();
 				}
 			}
 
