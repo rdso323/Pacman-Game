@@ -1,58 +1,47 @@
-package PACMAN;
+package PACMAN.Model;
 
+import PACMAN.Controller.multiPlayer;
+import PACMAN.Controller.singlePlayer;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.HBox;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.*;
-import javafx.scene.layout.BackgroundImage;
 
 public class countdown {
 
+	//Initialize required variable
 	private static final Integer stime = 3;
 	private Timeline timeline;
 	private Text timelabel = new Text();
 	private Integer timeSeconds = stime;
 
+	//3 second countdown for single player when starting game
 	public void setCD(Stage primaryStage){
 
+		//set stage as see through and undecorated
 		Stage countD = new Stage();
-		//countD.initModality(Modality.APPLICATION_MODAL);
 		countD.initStyle(StageStyle.UNDECORATED);
 		countD.initStyle(StageStyle.TRANSPARENT);
 		countD.setOpacity(0.5);
 
+		//set text for stage that will be changed as the counter progresses
 		timelabel.setText("Ready");
 		timelabel.setFont(Font.font("ARIAL", 50));
 		timelabel.setFill(Color.RED);
-		//timelabel.textProperty().bind(null);
-		//timelabel.setText("Set").after(Duration.seconds(1));
 
+		//timeline to countdown and set it to keep going
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
-		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>(){//every second run handle
 			public void handle(ActionEvent event) {
 				timeSeconds--;
 				if(timeSeconds == 2){
@@ -60,52 +49,37 @@ public class countdown {
 				}else if(timeSeconds == 1){
 					timelabel.setText("Go!");
 				}else if(timeSeconds <= 0){
-					timeline.stop();
-					countD.close();
-					CDend(primaryStage);
+					timeline.stop(); //stop timeline
+					countD.close(); //close stage
+					CDend(primaryStage); //call CDend function
 				}
 			}
 		}));
-		timeline.playFromStart();
+		timeline.playFromStart(); // start timeline when its setup
 
-
+		//set the layout of the stage
 		StackPane cDLayout = new StackPane();
 		cDLayout.setPadding(new Insets(15,15,15,15));
 		cDLayout.setAlignment(Pos.CENTER);
 		cDLayout.getChildren().add(timelabel);
 
+		//set scene to stage and display
 		Scene paused = new Scene(cDLayout,1024,768);
-
-
 		countD.setScene(paused);
 		countD.show();
 
-//		PauseTransition delay = new PauseTransition(Duration.seconds(3));
-//		delay.setOnFinished(new EventHandler<ActionEvent>(){
-//			@Override
-//			public void handle(ActionEvent event) {
-//				countD.close();
-//				CDend();
-//			}
-//		});
-//		delay.play();
-
 	}
 
+	//resume singele player game when countdown ends
 	public void CDend(Stage primaryStage){
-		//singlePlayer sinPlay = new singlePlayer();
-		//sinPlay.lvlTime(primaryStage);
 		singlePlayer.resettimer();
 		singlePlayer.gameResume();
-//		timer gtime = new timer();
-//		gtime.lvlTime(primaryStage);
-//		gtime.starttimer();
 	}
 
+	//3 second countdown for multiplayer
 	public void setCDMul(Stage primaryStage){
 
 		Stage countD = new Stage();
-		//countD.initModality(Modality.APPLICATION_MODAL);
 		countD.initStyle(StageStyle.UNDECORATED);
 		countD.initStyle(StageStyle.TRANSPARENT);
 		countD.setOpacity(0.5);
@@ -113,8 +87,6 @@ public class countdown {
 		timelabel.setText("Ready");
 		timelabel.setFont(Font.font("ARIAL", 50));
 		timelabel.setFill(Color.RED);
-		//timelabel.textProperty().bind(null);
-		//timelabel.setText("Set").after(Duration.seconds(1));
 
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
@@ -146,25 +118,11 @@ public class countdown {
 		countD.setScene(paused);
 		countD.show();
 
-//		PauseTransition delay = new PauseTransition(Duration.seconds(3));
-//		delay.setOnFinished(new EventHandler<ActionEvent>(){
-//			@Override
-//			public void handle(ActionEvent event) {
-//				countD.close();
-//				CDend();
-//			}
-//		});
-//		delay.play();
-
 	}
 
+	//resume game for multi player
 	public void CDendMul(Stage primaryStage){
-		//singlePlayer sinPlay = new singlePlayer();
-		//sinPlay.lvlTime(primaryStage);
 		multiPlayer.resettimer();
 		multiPlayer.gameResume();
-//		timer gtime = new timer();
-//		gtime.lvlTime(primaryStage);
-//		gtime.starttimer();
 	}
 }

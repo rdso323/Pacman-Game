@@ -1,21 +1,14 @@
-package PACMAN;
+package PACMAN.View;
 
-import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
+import PACMAN.Model.HighScoreScreen;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.*;
-import javafx.scene.text.*;
-import javafx.scene.layout.BackgroundImage;
 
 public class mainScreen {
 
@@ -26,7 +19,11 @@ public class mainScreen {
 	Button buttonHelp;
 	Button buttonHighScore;
 
+	//set up the main screen menu
 	public void menu(Stage primaryStage) throws Exception{
+
+		//for each button run the scene setup function and on the action event get the scene from that class
+		//set the scene to the stage, size of the button and text for them
 
 		singlePlayerStart sStart = new singlePlayerStart();
 		sStart.sinStart(primaryStage);
@@ -52,14 +49,18 @@ public class mainScreen {
 		buttonHighScore.setMinSize(150, 50);
 		buttonHighScore.setOnAction(e -> primaryStage.setScene(HighScoreScreen.getScene()));
 
-
+		//layout for a button
 		VBox homeLayout1 = new VBox(20);
 		homeLayout1.getChildren().add(buttonHighScore);
+
+		//layout for the buttons
 		HBox homeLayout = new HBox(100);
 		homeLayout.getChildren().add(buttonSinglePlayer);
 		homeLayout.getChildren().add(buttonMultiPlayer);
 		homeLayout.getChildren().add(buttonHelp);
 		homeLayout.setAlignment(Pos.CENTER);
+
+		//add other layouts to borderpane and add image to background set it to the scene
 		BorderPane menu = new BorderPane();
 		menu.setPadding(new Insets(10,10,160,10));
 		menu.setLeft(homeLayout1);
@@ -68,6 +69,7 @@ public class mainScreen {
 		homeScene = new Scene(menu,1024,768);
 	}
 
+	//returns the scene
 	public static Scene getScene(){
 		return homeScene;
 	}

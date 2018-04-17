@@ -1,5 +1,7 @@
 package PACMAN;
 
+import PACMAN.Model.backGMusic;
+import PACMAN.View.mainScreen;
 // Imports
 import javafx.application.Application;
 import javafx.stage.Stage;

@@ -1,4 +1,4 @@
-package PACMAN;
+package PACMAN.Model;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,25 +8,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-// Imports
-import javafx.application.Application;
+import PACMAN.Controller.singlePlayer;
+import PACMAN.View.mainScreen;
+import PACMAN.View.singlePlayerStart;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.HBox;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.image.*;
 import javafx.scene.text.*;
-import javafx.scene.layout.BackgroundImage;
 
 public class HighScoreScreen {
 
@@ -39,8 +32,9 @@ public class HighScoreScreen {
 
 	public void highScore(Stage primaryStage) throws IOException{
 
-		readFile();
+		readFile();//read file function
 
+		//positions for the labels
 		int x = 100;
 		int y = 200;
 		int sx = 445;
@@ -52,6 +46,7 @@ public class HighScoreScreen {
 		buttonHomeScreen.setMinSize(100, 50);
 		buttonHomeScreen.setOnAction(e -> primaryStage.setScene(mainScreen.getScene()));
 
+		//set up the labels for names and score
 		Label labelplayer1 = new Label(player1);
 		labelplayer1.setTextFill(Color.WHITE);
 		labelplayer1.setFont(Font.font("ARIAL", textsize));
@@ -104,11 +99,12 @@ public class HighScoreScreen {
 		labelscore5.setTranslateX(sx);
 		labelscore5.setTranslateY(sy);
 
-		// Set up layout of the scene
+		// Set up layout of the scene add players and scores
 		VBox scores = new VBox(50);
 		scores.getChildren().addAll(labelplayer1,labelplayer2,labelplayer3,labelplayer4,labelplayer5);
 		scores.getChildren().addAll(labelscore1,labelscore2,labelscore3,labelscore4,labelscore5);
 
+		//set up new layoout with the other layout and add image buttong and set scene
 		BorderPane hS = new BorderPane();
 		hS.setPadding(new Insets(35,10,10,30));
 		hS.setLeft(buttonHomeScreen);
@@ -123,12 +119,15 @@ public class HighScoreScreen {
 		return highScoreScene;
 	}
 
+	//set Score
 	public static void setScore(){
 		readFile();
 	}
 
+	//check scores with the previous scores and replace if applicable
 	public static void checkScores(){
 
+		//get the new players information
 		newPlayer = singlePlayerStart.getName();
 		newScore = Integer.parseInt(singlePlayer.getScore());
 
@@ -169,31 +168,36 @@ public class HighScoreScreen {
 			score5 = newScore;
 		}
 
-		writeFile();
+		writeFile();//write file function
 
 	}
 
+	//read from file and store values
 	public static void readFile(){
-		FileReader readFile = null;
+
+		FileReader readFile = null; //initailise
 		BufferedReader reader = null;
+
+		//read from file if possible
 		try {
 			readFile = new FileReader("highScore.txt");
 			reader = new BufferedReader(readFile);
-			String line = "NA:0";
+			String line = "N/A:0";
 			for(int i = 1; i < 6; i++){
 
+				//read line if possible if not then set the line value
 				try {
 					line = reader.readLine();
 				} catch (IOException e) {
-					line = "NA:0";
+					line = "N/A:0";
 				}
 
+				//split the read string into 2, player and score
 				String splitted[] = line.split(":");
 				String plyr = splitted[0];
 				int scre = Integer.parseInt(splitted[1]);
-				//String plyr = "no one";
-				//int scre = 100;
 
+				//assigne the values read to variables
 				if(i == 1){
 
 					player1 = plyr;
@@ -222,47 +226,48 @@ public class HighScoreScreen {
 				}
 			}
 
-		} catch (FileNotFoundException e) {
-			player1 = "NA";
+		} catch (FileNotFoundException e) { //if file not found set the variables
+			player1 = "N/A";
 			score1 = 0;
-			player2 = "NA";
+			player2 = "N/A";
 			score2 = 0;
-			player3 = "NA";
+			player3 = "N/A";
 			score3 = 0;
-			player4 = "NA";
+			player4 = "N/A";
 			score4 = 0;
-			player5 = "NA";
+			player5 = "N/A";
 			score5 = 0;
-		} finally{
+		} finally{//close file if possible
 			try {
 				reader.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}catch(NullPointerException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 
-		checkScores();
+		checkScores();//call check scores
 
 	}
 
+	//write the scores to file so they are saved
 	public static void writeFile(){
 
 		File scores = new File("highScore.txt");
+
 		if(!scores.exists()){
 			try {
 				scores.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 
 		FileWriter writetofile = null;
 		BufferedWriter writer = null;
 
-		try {
+		try { //write to file
 			writetofile = new FileWriter(scores);
 			writer = new BufferedWriter(writetofile);
 			writer.write( player1 + ":" + score1 + "\n");
@@ -271,13 +276,10 @@ public class HighScoreScreen {
 			writer.write( player4 + ":" + score4 + "\n");
 			writer.write( player5 + ":" + score5 + "\n");
 
-			writer.close();
+			writer.close();//close file
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-
-
 	}
 }

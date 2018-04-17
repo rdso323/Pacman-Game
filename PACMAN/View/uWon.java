@@ -1,8 +1,7 @@
-package PACMAN;
+package PACMAN.View;
 
-import javafx.animation.KeyFrame;
+import PACMAN.Main;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,35 +16,34 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class gamOvr {
+public class uWon {
 
-	public void gmeOvr(Stage primaryStage){
+	//won the game show
+	public void win(Stage primaryStage){
 
-		//singlePlayer sinPlay = new singlePlayer();
-		//singlePlayer.gamePause();
-
+		//set up the stage for the game win display
 		Stage gameO = new Stage();
 		gameO.initModality(Modality.APPLICATION_MODAL);
 		gameO.initStyle(StageStyle.UNDECORATED);
 		gameO.initStyle(StageStyle.TRANSPARENT);
 		gameO.setOpacity(0.5);
 
+		//set text to be displayed
 		Text GOText = new Text();
-		GOText.setText("Game Over");
+		GOText.setText("Congrats You Win!");
 		GOText.setFont(Font.font("ARIAL", 75));
 		GOText.setFill(Color.RED);
 
+		//set the layout and set scene and show on stage
 		StackPane GOLayout = new StackPane();
 		GOLayout.setPadding(new Insets(15,15,15,15));
 		GOLayout.setAlignment(Pos.CENTER);
 		GOLayout.getChildren().add(GOText);
-
 		Scene gameOve = new Scene(GOLayout,1024,768);
-
-
 		gameO.setScene(gameOve);
 		gameO.show();
 
+		//wait 5 seconds and go to the main menu
 		PauseTransition delay = new PauseTransition(Duration.seconds(5));
 		delay.setOnFinished(new EventHandler<ActionEvent>(){
 			@Override
@@ -54,12 +52,12 @@ public class gamOvr {
 				try {
 					main.start(primaryStage);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				gameO.close();
 			}
 		});
-		delay.play();
+		delay.play();//start the delay
 
 	}
 
