@@ -61,7 +61,7 @@ public class multiPlayer extends Application {
 	private Node  Goku, Jiren, Kefla, Toppo, Hit;
 	private Text Score_Text,Time_Text,Lives_Text,ScoreT;
 
-	private static Text TimeValue;
+	private static Text TimeValue1;
 	private Integer min = 2;
 	private Integer sec = 0;
 	public Integer minutesR,secondsR;
@@ -126,9 +126,9 @@ public class multiPlayer extends Application {
 		Time_Text .setFill(Color.WHITE);
 		Time_Text .setUnderline(true);
 
-		TimeValue = new Text(910, 420, "2:00");
-		TimeValue .setFont(Font.font("ARIAL", 30));
-		TimeValue .setFill(Color.WHITE);
+		TimeValue1 = new Text(910, 420, "2:00");
+		TimeValue1 .setFont(Font.font("ARIAL", 30));
+		TimeValue1 .setFill(Color.WHITE);
 
 		Lives_Text = new Text(900, 576, "Lives:");
 		Lives_Text.setFont(Font.font("ARIAL", 30));
@@ -151,7 +151,7 @@ public class multiPlayer extends Application {
 		map.getChildren().add(Lives_Text);
 		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
-		map.getChildren().add(TimeValue);
+		map.getChildren().add(TimeValue1);
 
 
 		Jiren.relocate(200,197);
@@ -1062,7 +1062,7 @@ public class multiPlayer extends Application {
 				timeSeconds--;
 				min = timeSeconds/60;
 				sec = timeSeconds%60;
-				TimeValue.setText(min.toString() + ":" + sec.toString());	
+				TimeValue1.setText(min.toString() + ":" + sec.toString());	
 				LifeAddition();				//USed to generate life after 60 seconds
 			}
 		}));

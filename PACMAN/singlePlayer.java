@@ -171,9 +171,9 @@ public class singlePlayer extends Application {
 		lvlTime(stage);
 		//System.out.println(minutesR/60 + ":" + secondsR%60);
 
-		PowerUp_Cooldown_Text = new Text(400,80,"Time to Cooldown:");
-		PowerUp_Cooldown_Text.setFont(Font.font("ARIAL", 15));
-		PowerUp_Cooldown_Text.setFill(Color.WHITE);
+//		PowerUp_Cooldown_Text = new Text(400,80,"Time to Cooldown:");
+//		PowerUp_Cooldown_Text.setFont(Font.font("ARIAL", 15));
+//		PowerUp_Cooldown_Text.setFill(Color.WHITE);
 
 
 		Lives_Text = new Text(900, 576, "Lives:");
@@ -228,7 +228,7 @@ public class singlePlayer extends Application {
 		map.getChildren().add(Lives_Text);
 		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
-		map.getChildren().add(PowerUp_Cooldown_Text);
+//		map.getChildren().add(PowerUp_Cooldown_Text);
 		map.getChildren().add(buttonPause);
 		map.getChildren().add(TimeValue);
 
@@ -1261,6 +1261,7 @@ public class singlePlayer extends Application {
 				//TimeValue.setText((timeSeconds/60).toString() +":" + (timeSeconds%60).toString());
 				min = timeSeconds/60;
 				sec = timeSeconds%60;
+//				LifeAddition();
 				//System.out.println(min.to);
 				//map.getChildren().remove(TimeValue);
 				if(sec < 10){

@@ -238,6 +238,8 @@ public class HighScoreScreen {
 				reader.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+			}catch(NullPointerException e) {
+				e.printStackTrace();
 			}
 		}
 
