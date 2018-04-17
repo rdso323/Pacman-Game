@@ -28,11 +28,11 @@ public class mainScreen {
 
 	public void menu(Stage primaryStage) throws Exception{
 
-		singlePlayer sinPlay = new singlePlayer();
-	//	sinPlay.start(primaryStage);
+		singlePlayerStart sStart = new singlePlayerStart();
+		sStart.sinStart(primaryStage);
 		buttonSinglePlayer = new Button("Single Player");
 		buttonSinglePlayer.setMinSize(150, 50);
-		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
+		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayerStart.getScene()));
 
 		multiPlayer multiPlay = new multiPlayer();
 		multiPlay.start(primaryStage);

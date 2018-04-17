@@ -1,17 +1,23 @@
 package PACMAN;
 
-//import javafx.event.ActionEvent;
 import java.io.File;
 //import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
-//import javafx.animation.Animation;
+
+import org.omg.CORBA.portable.ApplicationException;
+
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -26,10 +32,18 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javafx.animation.Timeline;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+
 import javafx.util.Duration;
-//import javafx.util.Duration;
 
 /**
  * Hold down an arrow key to have your character move around the screen.
@@ -62,17 +76,9 @@ public class singlePlayer extends Application {
 	static Scene scene;
 	private Image GokuImage, JirenImage, KeflaImage, ToppoImage, HitImage, BeanImage;
 	private ImageView Bean_1,Bean_2;
+
 	private Node  Goku, Jiren, Kefla, Toppo, Hit;
-	private Text Score_Text,Time_Text,Lives_Text, ScoreT;
-
-
-	private static Text TimeValue;
-	private Integer min = 2;
-	private Integer sec = 0;
-	public Integer minutesR,secondsR;
-	private Integer stime = 120;
-	private Timeline timeline_1, timeline_2;
-	private Integer timeSeconds = stime;
+	private Text Score_Text,Time_Text,Lives_Text;
 
 	private Integer PowerUp_Cooldown = 8;			//Display time till powerup wears off
 	private static Text PowerUp_Cooldown_Text;
@@ -85,6 +91,19 @@ public class singlePlayer extends Application {
 	private int Toppo_Direction = 0, Hit_Direction = 0;
 	private int Hit_Count = 0, Collectable_Count = 0, PowerUp_Countdown = 480;
 
+
+	private static Text TimeValue;
+
+	private static Text ScoreT;
+	private Timeline TimerLiner;
+	private int Score = 0;
+	private static Integer min = 2;
+	private static Integer sec = 0;
+	public Integer minutesR,secondsR;
+	private static final Integer stime = 120;
+	private static Timeline timeline;
+	private static Integer timeSeconds = stime;
+
 	Group map = new Group();
 
 
@@ -95,6 +114,9 @@ public class singlePlayer extends Application {
 
 
 	boolean North, South, East, West;
+
+	Button buttonPause;
+	static AnimationTimer Movement;
 
 
 	//    private static final Integer STARTTIME = 15;
@@ -134,9 +156,20 @@ public class singlePlayer extends Application {
 		Time_Text .setFill(Color.WHITE);
 		Time_Text .setUnderline(true);
 
-		TimeValue = new Text(910, 420, "2:00");
-		TimeValue .setFont(Font.font("ARIAL", 30));
-		TimeValue .setFill(Color.WHITE);
+//		timer time = new timer();
+//		time.lvlTime(stage);
+//		minutesR = (time.timeRemain())/60;
+//		secondsR = (time.timeRemain())%60;
+//		timeRemaining = time.timeRemain();
+		//System.out.println(time.timeRemain());
+
+		TimeValue = new Text(910,430,"2:00");
+		//TimeValue = new Text(910,420,minutesR.toString() + ":" + secondsR.toString());
+		//TimeValue.setText(minutesR.toString() + ":" + secondsR.toString());
+		TimeValue.setFont(Font.font("ARIAL", 30));
+		TimeValue.setFill(Color.WHITE);
+		lvlTime(stage);
+		//System.out.println(minutesR/60 + ":" + secondsR%60);
 
 		PowerUp_Cooldown_Text = new Text(400,80,"Time to Cooldown:");
 		PowerUp_Cooldown_Text.setFont(Font.font("ARIAL", 15));
@@ -147,6 +180,38 @@ public class singlePlayer extends Application {
 		Lives_Text.setFont(Font.font("ARIAL", 30));
 		Lives_Text.setFill(Color.WHITE);
 		Lives_Text.setUnderline(true);
+
+		buttonPause = new Button("Pause");
+		buttonPause.setMinSize(100, 50);
+		buttonPause.setTranslateX(900);
+		buttonPause.setTranslateY(25);
+		buttonPause.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+				gamePause();
+				PauseMenu.pause(stage);
+			}
+
+		});
+		buttonPause.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == (KeyCode.P)){
+					gamePause();
+					PauseMenu.pause(stage);
+					//timeline.pause();
+				}else if(event.getCode() == (KeyCode.ESCAPE)){
+					gamePause();
+					PauseMenu.pause(stage);
+					//timeline.pause();
+
+				}else if (event.getCode() == (KeyCode.PAGE_DOWN)){
+					//gamePause();
+					timeSeconds = 1;
+					//timeline.pause();
+				}
+			}
+		});
 
 
 		scene = new Scene(map, W, H, Color.BLACK);
@@ -163,8 +228,9 @@ public class singlePlayer extends Application {
 		map.getChildren().add(Lives_Text);
 		map.getChildren().add(Bean_1);
 		map.getChildren().add(ScoreT);
-		map.getChildren().add(TimeValue);
 		map.getChildren().add(PowerUp_Cooldown_Text);
+		map.getChildren().add(buttonPause);
+		map.getChildren().add(TimeValue);
 
 
 		Jiren.relocate(200,197);
@@ -173,6 +239,7 @@ public class singlePlayer extends Application {
 		Hit.relocate(421,390);
 		Bean_1.relocate(925,600);
 //		Bean_2.relocate(945,600);
+
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -192,7 +259,8 @@ public class singlePlayer extends Application {
 			}
 		});
 
-		AnimationTimer Movement = new AnimationTimer() {
+
+		Movement = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				double dx = 0, dy = 0;
@@ -227,21 +295,20 @@ public class singlePlayer extends Application {
 					}
 				}
 
-
+				//TimeValue.setText(minutesR.toString() + ":" + secondsR.toString());
+				//System.out.println(time.timeRemain());
+				//timeR(stage);
 				moveGokuBy(dx, dy);
 				moveJiren();
 				moveKefla();
 				moveToppo();
 				moveHit();
-				LifeChange();
+				LifeChange(stage);
 				//Timer();
 				GameWin();
-
 			}
 		};
 		Movement.start();
-		//		lvlTime(stage);
-		Clock_Timer();
 //		Clock_Collectable();
 
 	}
@@ -926,7 +993,6 @@ public class singlePlayer extends Application {
 
 		}
 
-
 		if(Collectable_Count == PowerUp_Total && PowerUp_Countdown==480) {	//If PowerUp isn't activated
 			PowerUp = 0;						
 			PowerUp_Countdown = 0;
@@ -985,8 +1051,7 @@ public class singlePlayer extends Application {
 	}
 
 
-
-	private void LifeChange() {
+	private void LifeChange(Stage stage) {
 		double Kefla_midx = Kefla.getLayoutX() + Kefla.getBoundsInLocal().getWidth();
 		double Kefla_midy = Kefla.getLayoutY() + Kefla.getBoundsInLocal().getHeight();
 		double Jiren_midx = Jiren.getLayoutX() + Jiren.getBoundsInLocal().getWidth();
@@ -1035,7 +1100,12 @@ public class singlePlayer extends Application {
 					MediaPlayer mediaPlayer = new MediaPlayer(sound);					//Collision sound
 					mediaPlayer.setCycleCount(1);
 					mediaPlayer.play();
-					Platform.exit();
+					//Platform.exit();
+					//mainS.menu();
+					gamePause();
+					HighScoreScreen.setScore();
+					gamOvr gO = new gamOvr();
+					gO.gmeOvr(stage);
 				}
 			}
 
@@ -1163,24 +1233,73 @@ public class singlePlayer extends Application {
 			System.out.println("Congrats You Won!");
 		}
 	}
+	public static void lvlTime(Stage primaryStage){
 
+//		timelabel.setText(timeSeconds.toString());
+//		timelabel.setFont(Font.font("ARIAL", 30));
+//		timelabel.setFill(Color.WHITE);
 
-	private void Clock_Timer(){
-		timeline_1 = new Timeline();
-		timeline_1.setCycleCount(Timeline.INDEFINITE);
-		timeline_1.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+//		Button pgdn = new Button("pagedown");
+//		pgdn.setOnKeyPressed(new EventHandler<KeyEvent>(){
+//			@Override
+//			public void handle(KeyEvent event){
+//				if (event.getCode() == (KeyCode.PAGE_DOWN)){
+//					//gamePause();
+//					timeSeconds = 1;
+//					//timeline.pause();
+//				}
+//				}
+//			});
 
+		timeline = new Timeline();
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event) {
 				timeSeconds--;
+				//timelabel.setText(timeSeconds.toString());
+				//System.out.println(timeSeconds/60 +":" + timeSeconds%60);
+				//TimeValue.setText((timeSeconds/60).toString() +":" + (timeSeconds%60).toString());
 				min = timeSeconds/60;
 				sec = timeSeconds%60;
-				TimeValue.setText(min.toString() + ":" + sec.toString());	
-				LifeAddition();				//USed to generate life after 60 seconds
+				//System.out.println(min.to);
+				//map.getChildren().remove(TimeValue);
+				if(sec < 10){
+					TimeValue.setText(min.toString() + ":0" + sec.toString());
+				}else{
+					TimeValue.setText(min.toString() + ":" + sec.toString());
+				}
+				//map.getChildren().add(TimeValue);
+				if(timeSeconds <= 0){
+					gamePause();
+					HighScoreScreen.setScore();
+					gamOvr gO = new gamOvr();
+					gO.gmeOvr(primaryStage);
+					timeline.stop();
+				}
 			}
 		}));
+		timeline.playFromStart();
 
-		timeline_1.playFromStart();
+		//scene.getChildren.add(timelabel);
 	}
+
+
+	public static void resettimer(){
+		timeSeconds = stime;
+	}
+
+	public static void gamePause(){
+		//Animation.Status.PAUSED;
+		Movement.stop();
+		timeline.pause();
+	}
+
+	public static void gameResume(){
+//		Animation.Status.RUNNING;
+		Movement.start();
+		timeline.play();
+	}
+
 
 //	private void Clock_Collectable() {
 //
@@ -1219,5 +1338,11 @@ public class singlePlayer extends Application {
 
 	public static Scene getScene() {
 		return scene;
-	}	
+
+	}
+
+	public static String getScore(){
+		String finalScore = ScoreT.getText();
+		return finalScore;
+	}
 }

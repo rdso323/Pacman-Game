@@ -19,22 +19,39 @@ import javafx.scene.layout.BackgroundImage;
 
 public class MultiPlayerScreen {
 
-	static Scene multiPlayerScene;
-	Button buttonPause;
+	static Scene multiScene;
 
 	public void mPlay(Stage primaryStage){
 
-		buttonPause = new Button("Pause");
-		buttonPause.setOnAction(e -> PauseMenu.pause(primaryStage));
+//		countdown cd = new countdown();
+		//singlePlayer sinPlay = new singlePlayer();
+		//sinPlay.start(primaryStage);
+		//sinPlay.gamePause();
+		Button buttonStart = new Button("Start");
+		buttonStart.setMinSize(150, 50);
+		buttonStart.setTranslateX(250);
+//		buttonSinglePlayer.setOnAction(e -> primaryStage.setScene(singlePlayer.getScene()));
+//		buttonStart.setOnAction(new EventHandler<ActionEvent>(){
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				primaryStage.setScene(singlePlayer.getScene());
+//				cd.setCD(primaryStage);
+//
+//			}
 
-		StackPane multiPlayerLayout = new StackPane();
-		multiPlayerLayout.setPadding(new Insets(10,10,10,10));
-		multiPlayerLayout.getChildren().add(buttonPause);
-		multiPlayerScene = new Scene(multiPlayerLayout, 1024,768);
+//		});
+
+
+
+		BorderPane multiSLayout = new BorderPane();
+		multiSLayout.setPadding(new Insets(10,10,10,10));
+		multiSLayout.setCenter(buttonStart);
+		multiSLayout.setStyle("-fx-background-image: url(\"file:Resources/multiPlScreen.png\"); -fx-background-size: 1024,768 ; -fx-background-repeat: no-repeat;");
+		multiScene = new Scene(multiSLayout,1024,768);
 	}
 
 	public static Scene getScene(){
-		return multiPlayerScene;
+		return multiScene;
 	}
 
 }
