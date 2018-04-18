@@ -1,5 +1,5 @@
-amae:1550
-NA:0
-NA:0
-NA:0
-NA:0
+owners:222700
+Phillip:21550
+Quentin:12050
+amar:11550
+Rohan:7900
