@@ -30,10 +30,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * Hold down an arrow key to have your character move around the screen.
- * Hold down the shift key to have the character run.
- */
 public class multiPlayer extends Application {
 
 	private static final double W = 1024, H = 768;

@@ -1,10 +1,11 @@
+/.classpath
+/.project
 /PACMAN/
+/README
 /Resources/
 /application.css
 /build.fxbuild
-/hs_err_pid1421.log
-/hs_err_pid1563.log
-/hs_err_pid1885.log
-/hs_err_pid1930.log
-/hs_err_pid1979.log
 /highScore.txt
+/.~lock.Phase 1 Report.docx#
+/Java Project Final Submission Table.docx
+/Phase 1 Report.docx

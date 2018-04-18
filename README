@@ -1,0 +1,62 @@
+PAC_MAN Dragon Edition
+
+Authors: Amar Parkash Singh
+	 Rohan D'Souza
+
+Steps to running game:
+
+1. Clone repository to your local machine
+	
+	1.1. Open terminal in the directory you wish to clone the repository
+	1.2. Open a browser and login into bitbucket
+	1.3. Go to repository you wish to clone
+	1.4. Copy and paste the link for the repository in terminal
+	1.5. Enter your password
+
+2. Run the game using Eclipse 4.7 Oxygen Java
+
+	2.1. Open Eclipse 4.7 Oxygen Java
+	2.2. Open the repository: 
+		File -> Open Projects From File System 
+	2.3. Select Directory:
+		navigate to the repository and click open and finish
+	2.4. In the navigator window navigate to:
+		PACMAN -> Main.java
+	2.5. Click the green play button to run the code
+
+
+Notes: The background music sometimes just stops playing and other time it works how its supposed to. This is due to the Garbage in java(we didnt have to do this).
+
+
+Link used to help start with movement of user, as well as base on which remaining code was formed: https://stackoverflow.com/questions/29962395/how-to-write-a-keylistener-for-javafx
+
+Links to the Images Used:
+
+https://www.flickr.com/photos/phathuu/37336799870/in/photolist-Zzxy8J-YTjRNN 
+
+https://www.flickr.com/photos/phathuu/36842701103/in/photolist-YxBA2C-Zzxy8J-MEwhNm-YTjRNN-skjQex-idpbwx-idps7b-idpbcp-idpDKZ-Z5xcqu-Y53wEA-idps3d-Z5xBqo-Y8EdGR-Z73H5S-Z5xBX5-N4EggW-Y8Etsx-Em6CTQ-idps1j-Z73vso-idpBVY-Z73vbS-HGAnkw-Z5xC7y-MWwRFw-MZbCwM-MEwg6y-Vz2AR9-idppZq-Y8Eot4-HaaFUH-Z9NeNB-GVwyEq-Jp74KH-21QffSh-RshxiT-ovCqEv-Z4ruwE-xCJhrZ 
+
+https://www.flickr.com/photos/phathuu/37791936712/in/photolist-YxBA2C-Zzxy8J-MEwhNm-YTjRNN-skjQex-idpbwx-idps7b-idpbcp-idpDKZ-Z5xcqu-Y53wEA-idps3d-Z5xBqo-Y8EdGR-Z73H5S-Z5xBX5-N4EggW-Y8Etsx-Em6CTQ-idps1j-Z73vso-idpBVY-Z73vbS-HGAnkw-Z5xC7y-MWwRFw-MZbCwM-MEwg6y-Vz2AR9-idppZq-Y8Eot4-HaaFUH-Z9NeNB-GVwyEq-Jp74KH-21QffSh-RshxiT-ovCqEv-Z4ruwE-xCJhrZ
+
+https://cdn.pixabay.com/photo/2014/04/02/10/52/rice-304804_960_720.png 
+
+https://upload.wikimedia.org/wikipedia/commons/d/d8/Dragonballstar.png 
+
+http://shiftingpixel.com/slir/w900/wp-content/uploads/2008/02/coffee-bean.jpg 
+
+https://www.flickr.com/photos/phathuu/35417356961/in/photolist-VXHdix-ouy5mS-qu1RaM-V9bWMW-Ua4MNa-Vc22LK-Vk4MWS-V9arV9-UNnMLq-V9cpdm-Ua1xoK-xfQaHp-r8AdLv-Y8EodK-Vk4MyN-V99Bkd-Ua1Cyp-owpVpB-Ua3yzi-V9987j-rpBYGG-VoGAtD-Ua1yAp-Ua5fBF-Vk6hw5-Vc2NDk-r8f18H-UNp4j7-UNqdJ7-VoEqUn-Ua3qD8-rnpsif-V9cqaw-qtVtZF-VoFf42-UNoi9d-V992jh-Vk6k1y-U7883W-Vk8qP3-UNoYdL-Vk4Prq-UNpSiN-U77aAU-Ua3jyc-Vc2YL4-V9apqE-V9aL1Y-Vk7gF5-VoFrFF 
+
+https://www.flickr.com/photos/marcelosilkscreen/29638483233/in/photolist-Ma3YtB-Vk89Zs-V9aqe3-Vk7Geo-UNp3jG-UNpZDQ-Vc14Xv-Vk7evo-Vc21gR-Vc2Yhi-Vk4MdY-UNqQ3y-Vk8AJ3-Vc2X46-Vc2Wme-V9bStA-Vk7Rm1-U788gG-UNoN2d-UNqeEW-UNquTm-UNp4Lj-U77KM9-U77x5A-VoFxze-Vk6VV3-Ua3pu4-Vk4Lp3-U77bvE-VoDiv6-V9bT4o-U78pwY-yn4518-Vk7rfq-UNpRzd-VoGyiM-U77cdb-UNqunG-Vc17bP-Vk87Vh-UNov4q-Ua2ftR-Vc2VRX-Ua2oZ8-VbZYZe-U769CJ-U78mUU-V9bY9U-UNqcV3-UNoMoQ 
+
+https://www.flickr.com/photos/phathuu/37480763182/in/photolist-YxBA2C-Zzxy8J-MEwhNm-YTjRNN-skjQex-idpbwx-idps7b-idpbcp-idpDKZ-Z5xcqu-Y53wEA-idps3d-Z5xBqo-Y8EdGR-Z73H5S-Z5xBX5-N4EggW-Y8Etsx-Em6CTQ-idps1j-Z73vso-idpBVY-Z73vbS-HGAnkw-Z5xC7y-MWwRFw-MZbCwM-MEwg6y-Vz2AR9-idppZq-Y8Eot4-HaaFUH-Z9NeNB-GVwyEq-Jp74KH-21QffSh-RshxiT-ovCqEv-Z4ruwE-xCJhrZ 
+
+https://www.flickr.com/photos/phathuu/37546399346 
+
+
+
+Link to Music:
+
+http://soundbible.com/1945-Smashing.html
+
+	
+

@@ -36,10 +36,6 @@ import javafx.scene.control.Button;
 
 import javafx.util.Duration;
 
-/**
- * Hold down an arrow key to have your character move around the screen.
- * Hold down the shift key to have the character run.
- */
 public class singlePlayer extends Application {
 
 	private static final double W = 1024, H = 768;
@@ -240,7 +236,7 @@ public class singlePlayer extends Application {
 					}
 				}
 
-				moveGokuBy(dx, dy);
+				moveGokuBy(dx, dy); //initialize functions
 				moveJiren();
 				moveKefla();
 				moveToppo();
@@ -851,7 +847,7 @@ public class singlePlayer extends Application {
 		map.getChildren().add(ScoreT);
 	}
 
-	//Colllision effects
+	//Collision effects
 	private void LifeChange(Stage stage) {
 		double Kefla_midx = Kefla.getLayoutX() + Kefla.getBoundsInLocal().getWidth();
 		double Kefla_midy = Kefla.getLayoutY() + Kefla.getBoundsInLocal().getHeight();

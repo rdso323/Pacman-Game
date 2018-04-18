@@ -17,7 +17,7 @@ public class MultiPlayerScreen {
 	//multiplayer story scene setup
 	public void mPlay(Stage primaryStage) throws Exception{
 
-		//crete new instances of the countdown class and multiplayer class
+		//create new instances of the countdown class and multiplayer class
 		countdown cd = new countdown();
 		multiPlayer multiP = new multiPlayer();
 		multiP.start(primaryStage);
