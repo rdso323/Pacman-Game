@@ -18,16 +18,12 @@ public class Main extends Application {
 		mainScreen mainS = new mainScreen();
 		mainS.menu(primaryStage);
 
-		// Initialize the music function
-		backGMusic bgm = new backGMusic();
-		bgm.bMusic();
-
 		primaryStage.setScene(mainScreen.getScene());
 		primaryStage.setResizable(false);
 		primaryStage.show();
-	}
 
-	public static void main(String[] args) {
-		launch(args);
+		// Start music after the window is visible so audio failures do not block launch.
+		backGMusic bgm = new backGMusic();
+		bgm.bMusic();
 	}
 }

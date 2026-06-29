@@ -3,30 +3,64 @@ PAC_MAN Dragon Edition
 Authors: Amar Parkash Singh
 	 Rohan D'Souza
 
-Steps to running game:
+## Running the game
 
-1. Clone repository to your local machine
-	
-	1.1. Open terminal in the directory you wish to clone the repository
-	1.2. Open a browser and login into bitbucket
-	1.3. Go to repository you wish to clone
-	1.4. Copy and paste the link for the repository in terminal
-	1.5. Enter your password
+### Option 1: Build a standalone executable (recommended)
 
-2. Run the game using Eclipse 4.7 Oxygen Java
+This project includes scripts to package the game as a native app using `jpackage`.
 
-	2.1. Open Eclipse 4.7 Oxygen Java
-	2.2. Open the repository: 
-		File -> Open Projects From File System 
-	2.3. Select Directory:
-		navigate to the repository and click open and finish
-	2.4. In the navigator window navigate to:
-		PACMAN -> Main.java
-	2.5. Click the green play button to run the code
+**Windows prerequisites**
+1. Install JDK 21+ (must include `jpackage`)
+2. Download JavaFX SDK 21 from https://gluonhq.com/products/javafx/
+3. Download JavaFX jmods 21 (same version as your JDK)
 
+Set environment variables (Command Prompt):
 
-Notes: The background music sometimes just stops playing and other time it works how its supposed to. This is due to the Garbage in java(we didnt have to do this).
+```cmd
+set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.8
+set JAVAFX_HOME=C:\javafx-sdk-21.0.8
+set JAVAFX_JMODS=C:\javafx-jmods-21.0.8
+```
 
+Build and run:
+
+```cmd
+git clone https://github.com/rdso323/Pacman-Game.git
+cd Pacman-Game
+scripts\build.bat
+scripts\launch.bat
+```
+
+The installed game lives at:
+
+```text
+%LOCALAPPDATA%\PacManDragon\baseline\PacManDragon-baseline\
+```
+
+Build an improved version for comparison:
+
+```cmd
+scripts\build.bat improved
+scripts\launch.bat improved
+```
+
+If the `.exe` shows "Failed to launch JVM", run `scripts\diagnose.bat` to see the real error in a console window.
+
+See `BUILD.md` for Linux instructions, troubleshooting, and full details.
+
+### Option 2: Run from Eclipse (development)
+
+1. Clone the repository
+2. Open Eclipse
+3. File -> Open Projects From File System -> select the repo folder
+4. Open `PACMAN -> Launcher.java` or `PACMAN -> Main.java`
+5. Run as Java Application (requires JavaFX SDK on the module path)
+
+## Notes
+
+The background music sometimes stops playing. This is due to Java garbage collection behavior in the original project. Packaged builds catch audio startup failures so the game still launches.
+
+## Credits and assets
 
 Link used to help start with movement of user, as well as base on which remaining code was formed: https://stackoverflow.com/questions/29962395/how-to-write-a-keylistener-for-javafx
 
@@ -52,11 +86,6 @@ https://www.flickr.com/photos/phathuu/37480763182/in/photolist-YxBA2C-Zzxy8J-MEw
 
 https://www.flickr.com/photos/phathuu/37546399346 
 
-
-
 Link to Music:
 
 http://soundbible.com/1945-Smashing.html
-
-	
-
